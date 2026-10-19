@@ -1,0 +1,147 @@
+// Centrally Controlled Global Site Container Class
+.site-container {
+  width: 100%;
+  max-width: var(--site-max-width, 1440px);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+
+  @media (min-width: 640px) {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  @media (min-width: 1024px) {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+// Frosted Glass Utility Classes
+.apple-glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow), var(--glass-inset);
+}
+
+.apple-glass-strong {
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(36px) saturate(200%);
+  -webkit-backdrop-filter: blur(36px) saturate(200%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow), var(--glass-inset);
+}
+
+.apple-glass-subtle {
+  background: var(--glass-bg-subtle);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid var(--glass-border-subtle);
+  box-shadow: var(--glass-inset);
+}
+
+.apple-glass-interactive {
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &:hover {
+    transform: translateY(-5px) scale(1.01);
+    box-shadow: 0 28px 60px -12px rgba(0, 122, 255, 0.16), var(--glass-inset);
+    border-color: rgba(56, 189, 248, 0.55);
+  }
+}
+
+// Specular Sheen Effect on Cards
+.glass-sheen {
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+      to right,
+      transparent,
+      rgba(255, 255, 255, 0.25),
+      transparent
+    );
+    transform: skewX(-25deg);
+    transition: 0.7s;
+    pointer-events: none;
+  }
+
+  &:hover::before {
+    left: 150%;
+  }
+}
+
+// Apple Pill Inputs
+.apple-input {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.03);
+  transition: all 0.25s ease;
+
+  &:focus {
+    outline: none;
+    border-color: #007aff;
+    box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.18);
+    background: rgba(255, 255, 255, 0.9);
+  }
+}
+
+html.dark .apple-input {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #f8fafc;
+
+  &:focus {
+    background: rgba(30, 41, 59, 0.9);
+  }
+}
+
+// Custom Scrollbar
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.45);
+  border-radius: 9999px;
+
+  &:hover {
+    background: rgba(100, 116, 139, 0.7);
+  }
+}
+
+// Ambient Mesh Background Orbs
+.ambient-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.55;
+  transition: opacity 0.5s ease;
+}
+
+html.dark .orb {
+  opacity: 0.32;
+}

@@ -1,0 +1,46 @@
+// =============================================================================
+// GLOBAL SITE MAX-WIDTH CONFIGURATION (SINGLE SOURCE OF TRUTH)
+// Edit $site-max-width below to globally change the maximum width across
+// the entire website (Header, Live Status Strip, Main Sections, and Footer).
+// =============================================================================
+$site-max-width: 1440px;
+
+// Apple VisionOS / macOS Sonoma / iOS 18 Design Tokens
+$apple-blue: #007aff;
+$apple-teal: #30b0c7;
+$apple-cyan: #32ade6;
+$apple-indigo: #5856d6;
+$apple-crimson: #e11d48;
+$apple-green: #34c759;
+$apple-amber: #ff9500;
+
+:root {
+  --site-max-width: #{$site-max-width};
+  --bg-base: #eef4f9;
+  --glass-bg: rgba(255, 255, 255, 0.62);
+  --glass-bg-strong: rgba(255, 255, 255, 0.8);
+  --glass-bg-subtle: rgba(255, 255, 255, 0.42);
+  --glass-border: rgba(255, 255, 255, 0.82);
+  --glass-border-subtle: rgba(255, 255, 255, 0.5);
+  --glass-shadow: 0 20px 50px -12px rgba(15, 23, 42, 0.08),
+    0 4px 16px -2px rgba(15, 23, 42, 0.04);
+  --glass-inset: inset 0 1px 1px 0 rgba(255, 255, 255, 0.9);
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+}
+
+html.dark {
+  --bg-base: #060b16;
+  --glass-bg: rgba(15, 23, 42, 0.58);
+  --glass-bg-strong: rgba(15, 23, 42, 0.8);
+  --glass-bg-subtle: rgba(30, 41, 59, 0.45);
+  --glass-border: rgba(255, 255, 255, 0.14);
+  --glass-border-subtle: rgba(255, 255, 255, 0.08);
+  --glass-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.55),
+    0 4px 20px -2px rgba(0, 0, 0, 0.35);
+  --glass-inset: inset 0 1px 1px 0 rgba(255, 255, 255, 0.18);
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+}
