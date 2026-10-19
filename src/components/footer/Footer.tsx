@@ -5,7 +5,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { Container } from "@/components/common/Container";
 
 export const Footer: React.FC = () => {
-  const { t } = useLanguage();
+  const { t, currentLang } = useLanguage();
 
   return (
     <footer
@@ -84,10 +84,21 @@ export const Footer: React.FC = () => {
 
       <Container className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
         <p>{t("footerCopyright")}</p>
-        <p className="flex items-center gap-1.5">
-          <i className="ph-fill ph-sparkle text-sky-500" /> Apple VisionOS Glassmorphism UI •
-          English &amp; বাংলা
-        </p>
+        <div className="flex items-center gap-2 text-xs">
+          <span className="text-slate-500 dark:text-slate-400">
+            {currentLang === "bn" ? "ডিজাইন ও ডেভেলপমেন্টে:" : "Designed & Developed by"}
+          </span>
+          <a
+            href="https://exzazon.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 font-bold text-slate-800 dark:text-white px-3 py-1 rounded-full bg-slate-200/70 dark:bg-white/10 hover:bg-sky-500 hover:text-white dark:hover:bg-sky-500 transition-all shadow-sm group"
+          >
+            <i className="ph-fill ph-sparkle text-sky-500 group-hover:text-white transition-colors" />
+            <span>Exzazon</span>
+            <i className="ph-bold ph-arrow-up-right text-[10px] text-slate-400 group-hover:text-white transition-colors" />
+          </a>
+        </div>
       </Container>
     </footer>
   );

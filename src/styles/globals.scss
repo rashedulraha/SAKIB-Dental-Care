@@ -1,4 +1,5 @@
 @use "./variables" as *;
+@use "./fonts" as *;
 @use "./glassmorphism" as *;
 @use "./hero" as *;
 
@@ -22,3 +23,44 @@ body {
 html {
   scroll-behavior: smooth;
 }
+
+/* ==========================================================================
+   Bengali Typography & Matra Protection
+   ========================================================================== */
+
+// 1. Language-Aware Font Stack Priority:
+// When language is Bengali, prioritize Hind Siliguri so that punctuation, brackets,
+// dashes, colons, digits, and spaces all match Hind Siliguri metrics and baseline.
+html[lang="bn"],
+html[lang="bn"] body,
+:lang(bn) {
+  font-family: "Hind Siliguri", "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+// 2. Matra (Headline) Protection:
+// In Bengali script, characters within a word connect via a continuous top headline ('Matra').
+// Positive letter-spacing (tracking) fractures this line, breaking words apart.
+// We strictly enforce letter-spacing: normal for Bengali text.
+html[lang="bn"],
+:lang(bn),
+.font-bangla {
+  letter-spacing: normal;
+  text-rendering: optimizeLegibility;
+
+  h1, h2, h3, h4, h5, h6 {
+    line-height: 1.25;
+  }
+}
+
+// Reset tracking classes when inside Bengali context to preserve typography integrity
+html[lang="bn"] [class*="tracking-"],
+:lang(bn) [class*="tracking-"] {
+  letter-spacing: normal !important;
+}
+
+// Ensure smooth font smoothing across platforms
+body, button, input, select, textarea {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+

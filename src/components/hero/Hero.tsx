@@ -81,7 +81,7 @@ export const Hero: React.FC = () => {
     return (
       <>
         {slide.titleEn}
-        <span className="block text-xl sm:text-3xl md:text-4xl mt-2 text-sky-300 font-bold">
+        <span className="block text-xl sm:text-3xl md:text-4xl mt-2 text-sky-300 font-bold leading-snug">
           {slide.titleBn}
         </span>
       </>
@@ -175,7 +175,7 @@ export const Hero: React.FC = () => {
           <span className="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_8px_#fbbf24] shrink-0" />
           <span
             id="heroSlideBadge"
-            className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.14em] sm:tracking-[0.16em] text-amber-400"
+            className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-amber-400"
           >
             {badgeText}
           </span>
@@ -184,7 +184,7 @@ export const Hero: React.FC = () => {
         {/* Main Display Headline */}
         <h1
           id="heroMainTitle"
-          className="text-3xl sm:text-5xl md:text-6xl lg:text-[68px] font-extrabold text-white tracking-tight leading-[1.12] sm:leading-[1.08] drop-shadow-2xl max-w-4xl"
+          className="text-3xl sm:text-5xl md:text-6xl lg:text-[68px] font-extrabold text-white tracking-tight leading-tight sm:leading-[1.16] drop-shadow-2xl max-w-4xl"
         >
           {renderTitle()}
         </h1>
