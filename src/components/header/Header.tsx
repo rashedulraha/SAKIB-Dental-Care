@@ -94,7 +94,7 @@ export const Header: React.FC = () => {
       : "DENTAL CARE • RAJSHAHI";
 
   return (
-    <header className="fixed top-0 inset-x-0 z-50 w-full h-[68px] sm:h-[78px] bg-[#070b16]/95 backdrop-blur-2xl border-b border-white/10 transition-all duration-300 shadow-lg shadow-black/20">
+    <header className="fixed top-0 inset-x-0 z-50 w-full h-[68px] sm:h-[78px] bg-[#070b16] border-b border-white/10 transition-all duration-300 shadow-xl shadow-black/50">
       <Container className="h-full flex items-center justify-between gap-1.5 xs:gap-2 sm:gap-4 !px-2.5 xs:!px-3 sm:!px-6">
         {/* Left Brand Crest & Name */}
         <a
@@ -245,10 +245,18 @@ export const Header: React.FC = () => {
         </div>
       </Container>
 
+      {/* Mobile Menu Backdrop Dimmer */}
+      {mobileMenuOpen && (
+        <div
+          className="lg:hidden fixed inset-0 top-[68px] sm:top-[78px] bg-black/75 backdrop-blur-sm z-40 transition-opacity"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+
       {/* Mobile/Tablet Dropdown Navigation Drawer (< lg) */}
       {mobileMenuOpen && (
-        <div className="lg:hidden absolute top-[68px] sm:top-[78px] inset-x-0 bg-[#070b16]/98 backdrop-blur-2xl border-b border-white/10 shadow-2xl transition-all duration-300 z-50">
-          <Container className="py-4 space-y-3 !px-4">
+        <div className="lg:hidden absolute top-[68px] sm:top-[78px] inset-x-0 bg-[#090e1f] border-b border-white/15 shadow-2xl transition-all duration-300 z-50">
+          <Container className="py-4 space-y-3.5 !px-4">
             <div className="grid grid-cols-2 gap-2">
               {navLinks.map((item) => {
                 const isActive = activeNav === item.id;
@@ -259,8 +267,8 @@ export const Header: React.FC = () => {
                     onClick={(e) => scrollToSection(e, item.href, item.id)}
                     className={`flex items-center gap-2.5 p-3 rounded-2xl transition-all text-xs font-bold ${
                       isActive
-                        ? "bg-sky-500/20 text-sky-400 border border-sky-500/40"
-                        : "text-slate-200 hover:bg-white/10 border border-white/5"
+                        ? "bg-sky-500/25 text-sky-400 border border-sky-500/50"
+                        : "text-slate-200 hover:bg-white/10 bg-[#111933] border border-white/10"
                     }`}
                   >
                     <i className={`ph-fill ${item.icon} text-base text-sky-400 shrink-0`} />
@@ -271,7 +279,7 @@ export const Header: React.FC = () => {
             </div>
 
             {/* Quick Action Bar inside Mobile Drawer */}
-            <div className="pt-2 border-t border-white/10 flex flex-col xs:flex-row items-stretch xs:items-center gap-2">
+            <div className="pt-2.5 border-t border-white/10 flex flex-col xs:flex-row items-stretch xs:items-center gap-2">
               <a
                 href="#booking"
                 onClick={(e) => scrollToSection(e, "#booking", "booking")}
@@ -282,7 +290,7 @@ export const Header: React.FC = () => {
               </a>
               <a
                 href="tel:+8801733054717"
-                className="px-3.5 py-2.5 rounded-xl apple-glass-subtle text-slate-200 hover:text-white font-bold text-xs flex items-center justify-center gap-2"
+                className="px-3.5 py-2.5 rounded-xl bg-[#111933] hover:bg-white/10 border border-white/10 text-slate-200 hover:text-white font-bold text-xs flex items-center justify-center gap-2"
               >
                 <i className="ph-fill ph-phone-call text-emerald-400 text-sm" />
                 <span>01733-054717</span>

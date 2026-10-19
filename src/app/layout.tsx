@@ -13,7 +13,8 @@ import { FloatingWhatsApp } from "@/components/common/FloatingWhatsApp";
 import { ServiceModal } from "@/components/modals/ServiceModal";
 
 export const metadata: Metadata = {
-  title: "Sakib Dental Care | সাকিব ডেন্টাল কেয়ার — Nowhata & Rajshahi City Branch",
+  title:
+    "Sakib Dental Care | সাকিব ডেন্টাল কেয়ার — Nowhata & Rajshahi City Branch",
   description:
     "Treatment is provided using ultra-modern equipment in a 100% germ-free (sterilized) environment. Dental X-Rays (Imaging) are performed here with utmost care. Chambers at Nowhata Bazar and Rajshahi City, Sopura.",
   keywords: [
@@ -46,7 +47,11 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
         <link
           href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
           rel="stylesheet"
