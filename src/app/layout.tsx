@@ -10,7 +10,6 @@ import { LanguageProvider } from "@/context/LanguageContext";
 import { AmbientBackground } from "@/components/common/AmbientBackground";
 import { ToastNotification } from "@/components/common/ToastNotification";
 import { FloatingWhatsApp } from "@/components/common/FloatingWhatsApp";
-import { MobileDock } from "@/components/common/MobileDock";
 import { ServiceModal } from "@/components/modals/ServiceModal";
 
 export const metadata: Metadata = {
@@ -53,13 +52,12 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="antialiased selection:bg-sky-500 selection:text-white pb-28 md:pb-12">
+      <body className="antialiased selection:bg-sky-500 selection:text-white pb-8 sm:pb-12">
         <ToastProvider>
           <ThemeProvider>
             <LanguageProvider>
               <AmbientBackground />
               {children}
-              <MobileDock />
               <FloatingWhatsApp />
               <ToastNotification />
               <ServiceModal />

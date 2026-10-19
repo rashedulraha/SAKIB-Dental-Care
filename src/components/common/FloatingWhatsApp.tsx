@@ -5,14 +5,14 @@ import React from "react";
 export const FloatingWhatsApp: React.FC = () => {
   return (
     <a
-      href="https://wa.me/8801733054717?text=Hello%20Sakib%20Dental%20Care%2C%20I%20would%20like%20to%20book%20a%20dental%20appointment."
+      href="https://wa.me/8801733054717?text=Assalamu%20Alaikum%2C%20I%20would%20like%20to%20book%20an%20appointment%20at%20Sakib%20Dental%20Care."
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Chat on WhatsApp 01733-054717"
-      title="WhatsApp Direct Serial: 01733-054717"
-      className="fixed bottom-20 md:bottom-6 right-5 z-50 w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-[#22c55e] hover:bg-[#16a34a] text-white flex items-center justify-center shadow-[0_10px_28px_rgba(34,197,94,0.45)] border-2 border-white/25 transition-all hover:scale-110"
+      aria-label="Direct WhatsApp Chat 01733-054717"
+      title="Chat on WhatsApp: 01733-054717"
+      className="fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-50 w-12 h-12 sm:w-13 sm:h-13 rounded-full bg-[#25D366] hover:bg-[#20ba59] active:scale-95 text-white flex items-center justify-center shadow-[0_8px_24px_rgba(37,211,102,0.45)] border-2 border-white/30 transition-all duration-300 hover:scale-105 group"
     >
-      <i className="ph-fill ph-whatsapp-logo text-2xl sm:text-3xl" />
+      <i className="ph-fill ph-whatsapp-logo text-2xl sm:text-[28px] drop-shadow-sm group-hover:rotate-6 transition-transform" />
     </a>
   );
 };
