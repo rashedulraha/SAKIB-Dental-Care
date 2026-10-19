@@ -83,8 +83,8 @@ export const Header: React.FC = () => {
     currentLang === "en"
       ? "Sakib"
       : currentLang === "bn"
-      ? "সাকিব ডেন্টাল কেয়ার"
-      : "Sakib • সাকিব ডেন্টাল";
+      ? "সাকিব ডেন্টাল"
+      : "Sakib • সাকিব";
 
   const brandSub =
     currentLang === "en"
@@ -94,19 +94,19 @@ export const Header: React.FC = () => {
       : "DENTAL CARE • RAJSHAHI";
 
   return (
-    <header className="fixed top-0 inset-x-0 z-50 w-full h-[78px] bg-[#070b16]/95 backdrop-blur-2xl border-b border-white/10 transition-all duration-300 shadow-lg shadow-black/20">
-      <Container className="h-full flex items-center justify-between gap-2 sm:gap-3">
-        {/* Left Brand Crest & Stacked Name */}
+    <header className="fixed top-0 inset-x-0 z-50 w-full h-[68px] sm:h-[78px] bg-[#070b16]/95 backdrop-blur-2xl border-b border-white/10 transition-all duration-300 shadow-lg shadow-black/20">
+      <Container className="h-full flex items-center justify-between gap-1.5 xs:gap-2 sm:gap-4 !px-2.5 xs:!px-3 sm:!px-6">
+        {/* Left Brand Crest & Name */}
         <a
           href="#hero"
           onClick={(e) => scrollToSection(e, "#hero", "hero")}
-          className="flex items-center gap-2 sm:gap-3 group shrink-0 min-w-0"
+          className="flex items-center gap-1.5 xs:gap-2 sm:gap-3 group shrink-0 min-w-0"
         >
           {/* Circular Prestige Dental Crest Emblem */}
-          <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white flex items-center justify-center p-0.5 shadow-md ring-2 ring-amber-400/70 group-hover:scale-105 transition-transform shrink-0">
+          <div className="w-8 h-8 xs:w-9 xs:h-9 sm:w-11 sm:h-11 rounded-full bg-white flex items-center justify-center p-0.5 shadow-md ring-2 ring-amber-400/70 group-hover:scale-105 transition-transform shrink-0">
             <div className="w-full h-full rounded-full border border-slate-200 flex flex-col items-center justify-center bg-gradient-to-b from-amber-50/80 via-white to-sky-50 relative overflow-hidden">
-              <i className="ph-fill ph-tooth text-sky-600 text-base sm:text-lg leading-none" />
-              <span className="text-[6px] font-black tracking-tighter text-rose-600 uppercase mt-0.5">
+              <i className="ph-fill ph-tooth text-sky-600 text-sm xs:text-base sm:text-lg leading-none" />
+              <span className="text-[5px] xs:text-[6px] font-black tracking-tighter text-rose-600 uppercase mt-0.5">
                 SDC
               </span>
             </div>
@@ -114,20 +114,20 @@ export const Header: React.FC = () => {
           <div className="flex flex-col min-w-0">
             <span
               id="navBrandTitle"
-              className="text-white text-sm sm:text-base md:text-[18px] font-extrabold tracking-tight leading-tight truncate max-w-[120px] xs:max-w-[160px] sm:max-w-none"
+              className="text-white text-xs xs:text-sm sm:text-base md:text-[18px] font-extrabold tracking-tight leading-tight truncate"
             >
               {brandTitle}
             </span>
             <span
               id="navBrandSub"
-              className="text-[8px] sm:text-[9px] md:text-[10px] font-semibold uppercase tracking-[0.12em] sm:tracking-[0.16em] text-slate-300/80 leading-tight mt-0.5 truncate hidden xs:block max-w-[140px] sm:max-w-none"
+              className="text-[8px] sm:text-[9px] md:text-[10px] font-semibold uppercase tracking-[0.12em] sm:tracking-[0.16em] text-slate-300/80 leading-tight mt-0.5 truncate hidden lg:block"
             >
               {brandSub}
             </span>
           </div>
         </a>
 
-        {/* Center Pill Track Navigation Menu (Desktop & Laptop) */}
+        {/* Center Pill Track Navigation Menu (Desktop & Laptop - lg and up) */}
         <nav
           aria-label="Main Navigation"
           className="hidden lg:flex items-center bg-white/[0.04] border border-white/[0.12] rounded-full p-1 gap-1 shadow-inner shrink-0"
@@ -151,15 +151,15 @@ export const Header: React.FC = () => {
           })}
         </nav>
 
-        {/* Right Control Cluster - Pixel-Perfect Height Standardization (h-9 / 36px) */}
-        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+        {/* Right Control Cluster - Ultra Responsive & Pixel-Perfect */}
+        <div className="flex items-center gap-1 xs:gap-1.5 sm:gap-2.5 shrink-0">
           {/* Language Switcher Pill */}
-          <div className="h-9 flex items-center bg-white/[0.04] border border-white/[0.14] rounded-full p-1 text-xs font-bold text-white">
+          <div className="h-8 sm:h-9 flex items-center bg-white/[0.04] border border-white/[0.14] rounded-full p-0.5 sm:p-1 text-xs font-bold text-white shrink-0">
             <button
               type="button"
               id="langBtn-en"
               onClick={() => setLanguage("en")}
-              className={`h-7 px-2.5 rounded-full text-[11px] sm:text-xs font-bold transition-all ${
+              className={`h-6 sm:h-7 px-1.5 xs:px-2 sm:px-2.5 rounded-full text-[10px] sm:text-xs font-bold transition-all ${
                 currentLang === "en"
                   ? "bg-white/20 text-white shadow-sm"
                   : "text-slate-300 hover:text-white"
@@ -172,7 +172,7 @@ export const Header: React.FC = () => {
               type="button"
               id="langBtn-bn"
               onClick={() => setLanguage("bn")}
-              className={`h-7 px-2.5 rounded-full text-[11px] sm:text-xs font-bold transition-all ${
+              className={`h-6 sm:h-7 px-1.5 xs:px-2 sm:px-2.5 rounded-full text-[10px] sm:text-xs font-bold transition-all ${
                 currentLang === "bn"
                   ? "bg-white/20 text-white shadow-sm"
                   : "text-slate-300 hover:text-white"
@@ -201,34 +201,34 @@ export const Header: React.FC = () => {
             id="themeToggleBtn"
             onClick={toggleTheme}
             aria-label="Toggle Dark or Light Glass Mode"
-            className="w-9 h-9 rounded-full bg-white/[0.04] border border-white/[0.14] flex items-center justify-center text-slate-200 hover:text-amber-300 hover:bg-white/10 transition-all shrink-0"
+            className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/[0.04] border border-white/[0.14] flex items-center justify-center text-slate-200 hover:text-amber-300 hover:bg-white/10 transition-all shrink-0"
             title="Switch Page Glass Theme"
           >
             <i
               id="themeIcon"
-              className={`ph-fill ${isDark ? "ph-sun" : "ph-moon-stars"} text-base`}
+              className={`ph-fill ${isDark ? "ph-sun" : "ph-moon-stars"} text-xs sm:text-base`}
             />
           </button>
 
           {/* Compound Action Capsule: Book Serial CTA + Direct Hotline Phone Call */}
-          <div className="h-9 flex items-center bg-white/[0.04] border border-white/[0.14] rounded-full p-1 gap-1 shrink-0">
+          <div className="h-8 sm:h-9 flex items-center bg-white/[0.04] border border-white/[0.14] rounded-full p-0.5 sm:p-1 gap-0.5 sm:gap-1 shrink-0">
             <a
               href="#booking"
               onClick={(e) => scrollToSection(e, "#booking", "booking")}
-              className="h-7 inline-flex items-center gap-1.5 sm:gap-2 bg-[#2563eb] hover:bg-[#1d4ed8] text-white text-[11px] sm:text-xs font-bold px-3 sm:px-3.5 rounded-full shadow-md shadow-blue-600/30 transition-all whitespace-nowrap"
+              className="h-6 sm:h-7 inline-flex items-center gap-1 xs:gap-1.5 sm:gap-2 bg-[#2563eb] hover:bg-[#1d4ed8] text-white text-[10px] sm:text-xs font-bold px-2 xs:px-2.5 sm:px-3.5 rounded-full shadow-md shadow-blue-600/30 transition-all whitespace-nowrap"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-sky-300 animate-pulse shrink-0" />
-              <i className="ph-bold ph-squares-four text-xs sm:text-sm shrink-0" />
+              <i className="ph-bold ph-squares-four text-[10px] sm:text-sm shrink-0" />
               <span className="hidden sm:inline">{t("navCtaBtn")}</span>
               <span className="inline sm:hidden">{currentLang === "bn" ? "সিরিয়াল" : "Book"}</span>
             </a>
-            {/* Real Hotline Phone Icon - Not Logout */}
+            {/* Direct Hotline Phone Call Button */}
             <a
               href="tel:+8801733054717"
               title="Call Hotline: 01733-054717"
-              className="w-7 h-7 rounded-full flex items-center justify-center text-emerald-400 hover:bg-emerald-500/20 hover:text-emerald-300 transition-colors shrink-0"
+              className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-emerald-400 hover:bg-emerald-500/20 hover:text-emerald-300 transition-colors shrink-0"
             >
-              <i className="ph-fill ph-phone-call text-xs sm:text-sm" />
+              <i className="ph-fill ph-phone-call text-[10px] sm:text-xs" />
             </a>
           </div>
 
@@ -237,18 +237,18 @@ export const Header: React.FC = () => {
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle navigation menu"
-            className="lg:hidden w-9 h-9 rounded-full bg-white/[0.04] border border-white/[0.14] flex items-center justify-center text-slate-200 hover:text-white hover:bg-white/10 transition-all shrink-0"
+            className="lg:hidden w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/[0.04] border border-white/[0.14] flex items-center justify-center text-slate-200 hover:text-white hover:bg-white/10 transition-all shrink-0"
             title="Navigation Menu"
           >
-            <i className={`ph-bold ${mobileMenuOpen ? "ph-x" : "ph-list"} text-lg`} />
+            <i className={`ph-bold ${mobileMenuOpen ? "ph-x" : "ph-list"} text-sm sm:text-base`} />
           </button>
         </div>
       </Container>
 
       {/* Mobile/Tablet Dropdown Navigation Drawer (< lg) */}
       {mobileMenuOpen && (
-        <div className="lg:hidden absolute top-[78px] inset-x-0 bg-[#070b16]/98 backdrop-blur-2xl border-b border-white/10 shadow-2xl transition-all duration-300 z-50">
-          <Container className="py-4 space-y-3">
+        <div className="lg:hidden absolute top-[68px] sm:top-[78px] inset-x-0 bg-[#070b16]/98 backdrop-blur-2xl border-b border-white/10 shadow-2xl transition-all duration-300 z-50">
+          <Container className="py-4 space-y-3 !px-4">
             <div className="grid grid-cols-2 gap-2">
               {navLinks.map((item) => {
                 const isActive = activeNav === item.id;
