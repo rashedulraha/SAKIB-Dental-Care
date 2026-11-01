@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Inter } from "next/font/google";
 import "@phosphor-icons/web/regular";
 import "@phosphor-icons/web/bold";
 import "@phosphor-icons/web/fill";
@@ -12,6 +13,13 @@ import { AmbientBackground } from "@/components/common/AmbientBackground";
 import { ToastNotification } from "@/components/common/ToastNotification";
 import { FloatingWhatsApp } from "@/components/common/FloatingWhatsApp";
 import { ServiceModal } from "@/components/modals/ServiceModal";
+
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+});
 
 export const metadata: Metadata = {
   title:
@@ -45,19 +53,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html lang="en" className={`scroll-smooth ${inter.variable}`}>
       <body className="antialiased selection:bg-sky-500 selection:text-white">
         <ToastProvider>
           <ThemeProvider>

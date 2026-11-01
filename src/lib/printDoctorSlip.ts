@@ -366,3 +366,4 @@ export function printDoctorSlip(slipHtml: string): void {
     }, 2000);
   }, 250);
 }
+

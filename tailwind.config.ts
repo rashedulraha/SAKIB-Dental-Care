@@ -16,8 +16,25 @@ const config: Config = {
         xs: "420px",
       },
       fontFamily: {
-        sans: ['"Plus Jakarta Sans"', '"Hind Siliguri"', "sans-serif"],
-        bangla: ['"Hind Siliguri"', '"Plus Jakarta Sans"', "sans-serif"],
+        sans: [
+          "var(--font-inter)",
+          '"Inter"',
+          "-apple-system",
+          "BlinkMacSystemFont",
+          '"SF Pro Text"',
+          '"SF Pro Display"',
+          '"Hind Siliguri"',
+          "system-ui",
+          "sans-serif",
+        ],
+        bangla: [
+          '"Hind Siliguri"',
+          "var(--font-inter)",
+          '"Inter"',
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "sans-serif",
+        ],
       },
       colors: {
         apple: {

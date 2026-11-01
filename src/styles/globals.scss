@@ -8,13 +8,14 @@
 @tailwind utilities;
 
 body {
-  font-family: "Plus Jakarta Sans", "Hind Siliguri", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: var(--font-inter), "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Hind Siliguri", "Segoe UI", Roboto, sans-serif;
   background-color: var(--bg-base);
   color: var(--text-primary);
   overflow-x: clip;
   margin: 0;
   padding: 0;
   transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s ease;
+  letter-spacing: -0.011em;
 }
 
 html {
@@ -31,7 +32,7 @@ html {
 html[lang="bn"],
 html[lang="bn"] body,
 :lang(bn) {
-  font-family: "Hind Siliguri", "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: "Hind Siliguri", var(--font-inter), "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
 }
 
 // 2. Matra (Headline) Protection:
