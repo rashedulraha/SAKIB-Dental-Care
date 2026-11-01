@@ -13,9 +13,9 @@ export const heroSlides: HeroSlide[] = [
     titleEn: "A Healthy Smile for Future Generations",
     titleBn: "সুন্দর ও সুস্থ হাসির নির্ভরযোগ্য ঠিকানা",
     subEn:
-      "100% sterilized dental care with ultra-modern equipment, on-site Digital Dental X-Ray (Imaging), and two convenient branches in Nowhata Bazar (9 AM–6 PM) & Rajshahi City, Sopura (7 PM–11 PM).",
+      "100% sterilized dental care with ultra-modern equipment, on-site Digital Dental X-Ray (Imaging), and two convenient branches in Nowhata Bazar (9 AM–9 PM) & Rajshahi City, Sopura (5 PM–10 PM).",
     subBn:
-      "সর্বাধুনিক যন্ত্রপাতি ও জীবাণুমুক্ত পরিবেশে দাঁতের সকল চিকিৎসা। এখন নওহাটা বাজার শাখা (সকাল ৯টা–সন্ধ্যা ৬টা) এবং রাজশাহী শহর শাখা, সপুরা (সন্ধ্যা ৭টা–রাত ১১টা)-তে সেবা প্রদান করা হচ্ছে।",
+      "সর্বাধুনিক যন্ত্রপাতি ও জীবাণুমুক্ত পরিবেশে দাঁতের সকল চিকিৎসা। এখন নওহাটা বাজার শাখা (সকাল ৯টা–রাত ৯টা) এবং রাজশাহী শহর শাখা, সপুরা (বিকাল ৫টা–রাত ১০টা)-তে সেবা প্রদান করা হচ্ছে (শুক্রবার বন্ধ)।",
     captionEn: "Sakib Dental Care • Nowhata & Rajshahi City",
     captionBn: "সাকিব ডেন্টাল কেয়ার • নওহাটা ও রাজশাহী শহর শাখা",
   },
@@ -61,14 +61,14 @@ export const heroSlides: HeroSlide[] = [
     imageUrl:
       "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&w=1920&q=85",
     badgeEn: "2 BRANCHES • MORNING TO NIGHT COVERAGE",
-    badgeBn: "২টি শাখা • সকাল ৯টা থেকে রাত ১১টা পর্যন্ত সেবা",
+    badgeBn: "২টি শাখা • সকাল ৯টা থেকে রাত ১০টা পর্যন্ত সেবা",
     titleEn: "Serving Nowhata Bazar & Rajshahi City",
     titleBn: "নওহাটা বাজার ও রাজশাহী শহর শাখায় নিয়মিত সেবা",
     subEn:
-      "Nowhata Branch (East of Akbari Mosque, Nowhata Bazar): 9:00 AM – 6:00 PM | City Branch (Kasaikhana More, Jinnahnagar, Sopura, Rajshahi): 7:00 PM – 11:00 PM.",
+      "Nowhata Branch (East of Akbari Mosque, Nowhata Bazar): 9:00 AM – 9:00 PM (Friday Closed) | City Branch (Kasaikhana More, Jinnahnagar, Sopura, Rajshahi): 5:00 PM – 10:00 PM (Friday Closed).",
     subBn:
-      "নওহাটা শাখা (আকবরী মসজিদের পূর্বে, নওহাটা বাজার): সকাল ৯টা – সন্ধ্যা ৬টা | শহর শাখা (কসাইখানা মোড়, জিন্নাহনগর, সপুরা, রাজশাহী): সন্ধ্যা ৭টা – রাত্রি ১১টা।",
-    captionEn: "WhatsApp Serial: 01733-054717 • Hotline: 01688-434676",
-    captionBn: "হোয়াটসঅ্যাপ: ০১৭৩৩-০৫৪৭১৭ • সিরিয়াল: ০১৬৮৮-৪৩৪৬৭৬",
+      "নওহাটা শাখা (আকবরী মসজিদের পূর্বে, নওহাটা বাজার): সকাল ৯:০০ টা – রাত ৯:০০ টা (শুক্রবার বন্ধ) | শহর শাখা (কসাইখানা মোড়, জিন্নাহনগর, সপুরা, রাজশাহী): বিকাল ৫:০০ টা – রাত ১০:০০ টা (শুক্রবার বন্ধ)।",
+    captionEn: "WhatsApp Serial: 01733-054717",
+    captionBn: "হোয়াটসঅ্যাপ সিরিয়াল: ০১৭৩৩-০৫৪৭১৭",
   },
 ];
