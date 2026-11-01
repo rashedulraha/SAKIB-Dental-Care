@@ -9,4 +9,3 @@ export default defineConfig({
       "postgresql://postgres:postgres@localhost:5432/sakib_dental_db?sslmode=require",
   },
 });
-
