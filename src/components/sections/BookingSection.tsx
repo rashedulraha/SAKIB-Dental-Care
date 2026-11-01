@@ -8,10 +8,8 @@ import { dentalServices } from "@/data/services";
 import { branchDetails } from "@/data/branches";
 import { toBanglaDigits } from "@/data/translations";
 import { CustomSelect } from "@/components/common/CustomSelect";
-import {
-  AppointmentSlipModal,
-  AppointmentSlipData,
-} from "@/components/booking/AppointmentSlipModal";
+import { PrintConfirmModal } from "@/components/booking/PrintConfirmModal";
+import { DoctorSlipData } from "@/lib/printDoctorSlip";
 
 export const BookingSection: React.FC = () => {
   const {
@@ -35,8 +33,7 @@ export const BookingSection: React.FC = () => {
   const [serialId, setSerialId] = useState<string>("#SDC-2601");
   const [isFridayWarning, setIsFridayWarning] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [isSlipModalOpen, setIsSlipModalOpen] = useState<boolean>(false);
-  const [slipIsConfirmed, setSlipIsConfirmed] = useState<boolean>(false);
+  const [isPrintModalOpen, setIsPrintModalOpen] = useState<boolean>(false);
 
   // Initialize date and serial ID on client mount
   useEffect(() => {
@@ -195,8 +192,7 @@ Please confirm my appointment serial. Thank you!`;
       return;
     }
 
-    setSlipIsConfirmed(false);
-    setIsSlipModalOpen(true);
+    setIsPrintModalOpen(true);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -266,10 +262,6 @@ Please confirm my appointment serial. Thank you!`;
     );
 
     window.open(url, "_blank", "noopener,noreferrer");
-
-    // Open the official confirmation slip modal
-    setSlipIsConfirmed(true);
-    setIsSlipModalOpen(true);
   };
 
   const handleCopy = () => {
@@ -289,7 +281,7 @@ Please confirm my appointment serial. Thank you!`;
       });
   };
 
-  const slipData: AppointmentSlipData = {
+  const slipData: DoctorSlipData = {
     serialId,
     patientName: patientName.trim() || (isBn ? "রোগীর নাম" : "Patient Name"),
     patientAge: patientAge.trim() || undefined,
@@ -305,7 +297,6 @@ Please confirm my appointment serial. Thank you!`;
     patientNotes: patientNotes.trim() || undefined,
     hotline,
     whatsappNumber,
-    whatsappUrl: getWhatsAppLink(buildFormattedBookingText()),
   };
 
   return (
@@ -761,12 +752,11 @@ Please confirm my appointment serial. Thank you!`;
         </div>
       </div>
 
-      {/* Official Printable Appointment Slip Modal */}
-      <AppointmentSlipModal
-        isOpen={isSlipModalOpen}
-        onClose={() => setIsSlipModalOpen(false)}
+      {/* Small Confirmation & Print Dialog */}
+      <PrintConfirmModal
+        isOpen={isPrintModalOpen}
+        onClose={() => setIsPrintModalOpen(false)}
         data={slipData}
-        isConfirmed={slipIsConfirmed}
       />
     </section>
   );

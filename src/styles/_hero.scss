@@ -19,65 +19,10 @@
   animation-play-state: paused !important;
 }
 
-// High-Fidelity Single-Page Print Styles for Appointment Serial Slip
+// Default print settings for page
 @media print {
-  /* Set A4 page format, portrait, balanced margins */
   @page {
     size: A4 portrait;
-    margin: 8mm 10mm;
-  }
-
-  /* Force exact background colors and crisp vector borders */
-  * {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  /* Hide default page layout, background, headers and footers */
-  body * {
-    visibility: hidden !important;
-  }
-
-  /* Expose ONLY the dedicated Printable Appointment Slip and its children */
-  #printableAppointmentSlip,
-  #printableAppointmentSlip * {
-    visibility: visible !important;
-  }
-
-  /* Reset body and html layout */
-  html,
-  body {
-    background: #ffffff !important;
-    color: #0f172a !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    width: 100% !important;
-    height: auto !important;
-    overflow: visible !important;
-  }
-
-  /* Position slip cleanly on standard single-page printout */
-  #printableAppointmentSlip {
-    position: absolute !important;
-    left: 0 !important;
-    top: 0 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 !important;
-    padding: 16px 20px !important;
-    box-shadow: none !important;
-    border: 2px solid #0284c7 !important;
-    border-radius: 12px !important;
-    background: #ffffff !important;
-    color: #0f172a !important;
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-
-  /* Hide screen-only modal backdrops and action buttons */
-  .no-print,
-  .no-print * {
-    display: none !important;
-    visibility: hidden !important;
+    margin: 10mm;
   }
 }
