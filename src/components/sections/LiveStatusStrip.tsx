@@ -9,9 +9,6 @@ import { Container } from "@/components/common/Container";
 export const LiveStatusStrip: React.FC = () => {
   const { currentLang, t } = useLanguage();
   const {
-    settings,
-    hotline,
-    hotlineTel,
     whatsappNumber,
     whatsappLink,
     noticeActive,
@@ -34,7 +31,9 @@ export const LiveStatusStrip: React.FC = () => {
       const minPadded = String(minute).padStart(2, "0");
 
       if (currentLang === "bn") {
-        setCurrentTimeStr(`${toBanglaDigits(hr12)}:${toBanglaDigits(minPadded)} ${ampm}`);
+        setCurrentTimeStr(
+          `${toBanglaDigits(hr12)}:${toBanglaDigits(minPadded)} ${ampm}`,
+        );
       } else {
         setCurrentTimeStr(`${hr12}:${minPadded} ${ampm}`);
       }
@@ -49,7 +48,7 @@ export const LiveStatusStrip: React.FC = () => {
         setStatusMessage(
           currentLang === "bn"
             ? "আজ শুক্রবার: উভয় শাখা বন্ধ রয়েছে (জরুরি প্রয়োজনে WhatsApp-এ যোগাযোগ করুন)"
-            : "TODAY IS FRIDAY: Both branches closed (Contact WhatsApp for urgent inquiries)"
+            : "TODAY IS FRIDAY: Both branches closed (Contact WhatsApp for urgent inquiries)",
         );
         return;
       }
@@ -61,25 +60,25 @@ export const LiveStatusStrip: React.FC = () => {
         setStatusMessage(
           currentLang === "bn"
             ? `এখন উভয় শাখা খোলা আছে: নওহাটা (${nawhataHours}) ও শহর শাখা (${cityHours})`
-            : `OPEN NOW: Both Branches Open (Nowhata & City Branch)`
+            : `OPEN NOW: Both Branches Open (Nowhata & City Branch)`,
         );
       } else if (nawhataOpen) {
         setStatusMessage(
           currentLang === "bn"
             ? `এখন খোলা আছে: নওহাটা শাখা (${nawhataHours}) • বিকাল ৫টা থেকে শহর শাখা`
-            : `OPEN NOW: Nowhata Branch (${nawhataHours}) • City Branch opens at 5:00 PM`
+            : `OPEN NOW: Nowhata Branch (${nawhataHours}) • City Branch opens at 5:00 PM`,
         );
       } else if (cityOpen) {
         setStatusMessage(
           currentLang === "bn"
             ? `এখন খোলা আছে: শহর শাখা (${cityHours})`
-            : `OPEN NOW: City Branch (${cityHours})`
+            : `OPEN NOW: City Branch (${cityHours})`,
         );
       } else {
         setStatusMessage(
           currentLang === "bn"
             ? `নওহাটা শাখা: ${nawhataHours} • শহর শাখা: ${cityHours} (অনলাইন সিরিয়াল চলছে)`
-            : `Nowhata: ${nawhataHours} • City: ${cityHours} (24/7 Online Booking)`
+            : `Nowhata: ${nawhataHours} • City: ${cityHours} (24/7 Online Booking)`,
         );
       }
     };
@@ -112,8 +111,7 @@ export const LiveStatusStrip: React.FC = () => {
               noticeActive
                 ? "text-amber-700 dark:text-amber-300 font-bold"
                 : "text-slate-700 dark:text-slate-200"
-            }`}
-          >
+            }`}>
             {statusMessage}
           </span>
 
@@ -127,8 +125,7 @@ export const LiveStatusStrip: React.FC = () => {
         <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-center">
           <span
             id="topXrayBadge"
-            className="inline-flex items-center gap-1.5 text-rose-600 dark:text-rose-400 font-semibold bg-rose-500/10 px-2.5 py-0.5 rounded-full border border-rose-500/20 text-xs"
-          >
+            className="inline-flex items-center gap-1.5 text-rose-600 dark:text-rose-400 font-semibold bg-rose-500/10 px-2.5 py-0.5 rounded-full border border-rose-500/20 text-xs">
             <i className="ph-fill ph-sparkle text-xs" />
             <span>{t("topXrayHighlight")}</span>
           </span>
@@ -136,8 +133,7 @@ export const LiveStatusStrip: React.FC = () => {
             href={whatsappLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 font-bold text-sky-700 dark:text-sky-300 hover:text-sky-600 dark:hover:text-sky-200 transition-colors shrink-0 text-xs sm:text-sm"
-          >
+            className="inline-flex items-center gap-1.5 font-bold text-sky-700 dark:text-sky-300 hover:text-sky-600 dark:hover:text-sky-200 transition-colors shrink-0 text-xs sm:text-sm">
             <i className="ph-fill ph-whatsapp-logo text-base text-emerald-500" />
             <span>WhatsApp / Serial: {whatsappNumber}</span>
           </a>

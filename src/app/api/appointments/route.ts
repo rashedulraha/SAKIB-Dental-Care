@@ -8,6 +8,7 @@ export async function POST(req: Request) {
       patientName,
       patientPhone,
       patientAge,
+      patientAddress,
       branchKey,
       serviceId,
       serviceTitle,
@@ -27,6 +28,16 @@ export async function POST(req: Request) {
     const randNum = Math.floor(1000 + Math.random() * 9000);
     const serialId = `#SDC-${randNum}`;
 
+    // Combine patient address & symptoms into notes cleanly
+    const noteParts: string[] = [];
+    if (patientAddress && String(patientAddress).trim()) {
+      noteParts.push(`[ঠিকানা/এলাকা: ${String(patientAddress).trim()}]`);
+    }
+    if (patientNotes && String(patientNotes).trim()) {
+      noteParts.push(String(patientNotes).trim());
+    }
+    const combinedNotes = noteParts.length > 0 ? noteParts.join("\n") : null;
+
     const appointment = await prisma.appointment.create({
       data: {
         serialId,
@@ -38,7 +49,7 @@ export async function POST(req: Request) {
         serviceTitle: serviceTitle || "General Dental Care",
         appointmentDate: String(appointmentDate),
         timeSlot: String(timeSlot),
-        patientNotes: patientNotes ? String(patientNotes).trim() : null,
+        patientNotes: combinedNotes,
         status: "PENDING",
       },
     });

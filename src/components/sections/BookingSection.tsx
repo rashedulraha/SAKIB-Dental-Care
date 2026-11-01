@@ -8,6 +8,10 @@ import { dentalServices } from "@/data/services";
 import { branchDetails } from "@/data/branches";
 import { toBanglaDigits } from "@/data/translations";
 import { CustomSelect } from "@/components/common/CustomSelect";
+import {
+  AppointmentSlipModal,
+  AppointmentSlipData,
+} from "@/components/booking/AppointmentSlipModal";
 
 export const BookingSection: React.FC = () => {
   const {
@@ -24,12 +28,15 @@ export const BookingSection: React.FC = () => {
   const [patientName, setPatientName] = useState<string>("");
   const [patientAge, setPatientAge] = useState<string>("");
   const [patientPhone, setPatientPhone] = useState<string>("");
+  const [patientAddress, setPatientAddress] = useState<string>("");
   const [bookingDate, setBookingDate] = useState<string>("");
   const [bookingTimeSlot, setBookingTimeSlot] = useState<string>("");
   const [patientNotes, setPatientNotes] = useState<string>("");
   const [serialId, setSerialId] = useState<string>("#SDC-2601");
   const [isFridayWarning, setIsFridayWarning] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isSlipModalOpen, setIsSlipModalOpen] = useState<boolean>(false);
+  const [slipIsConfirmed, setSlipIsConfirmed] = useState<boolean>(false);
 
   // Initialize date and serial ID on client mount
   useEffect(() => {
@@ -129,6 +136,7 @@ export const BookingSection: React.FC = () => {
     const name = patientName.trim() || "Not specified";
     const age = patientAge.trim() || "-";
     const phone = patientPhone.trim() || "Not specified";
+    const address = patientAddress.trim();
     const serviceTitle =
       currentLang === "bn" ? selectedServiceObj.titleBn : selectedServiceObj.titleEn;
     const branchName = currentLang === "bn" ? bInfo.nameBn : bInfo.nameEn;
@@ -140,14 +148,13 @@ export const BookingSection: React.FC = () => {
 
 📋 *সিরিয়াল আইডি:* ${activeSerial}
 🏥 *নির্বাচিত শাখা:* ${branchName}
-📍 *ঠিকানা:* ${branchAddress}
-👤 *রোগীর নাম:* ${name} (বয়স: ${age})
+📍 *চেম্বারের ঠিকানা:* ${branchAddress}
+👤 *রোগীর নাম:* ${name} (বয়স: ${age !== "-" ? `${toBanglaDigits(age)} বছর` : "-"})
 📞 *মোবাইল:* ${phone}
-🦷 *চিকিৎসার ধরন:* ${serviceTitle}
+${address ? `🏠 *রোগীর ঠিকানা/এলাকা:* ${address}\n` : ""}🦷 *চিকিৎসার ধরন:* ${serviceTitle}
 📅 *তারিখ:* ${bookingDate}
 ⏰ *সময়:* ${bookingTimeSlot}
-${patientNotes.trim() ? `📝 *সমস্যার বিবরণ:* ${patientNotes.trim()}` : ""}
-
+${patientNotes.trim() ? `📝 *সমস্যার বিবরণ:* ${patientNotes.trim()}\n` : ""}
 অনুগ্রহ করে আমার সিরিয়ালটি নিশ্চিত করবেন। ধন্যবাদ!`;
     }
 
@@ -159,16 +166,60 @@ I would like to book a dental appointment at *Sakib Dental Care (সাকিব
 📍 *Location:* ${bInfo.addressEn}
 👤 *Patient Name:* ${name} (Age: ${age})
 📞 *Mobile:* ${phone}
-🦷 *Treatment:* ${serviceTitle}
+${address ? `🏠 *Patient Address/Area:* ${address}\n` : ""}🦷 *Treatment:* ${serviceTitle}
 📅 *Date:* ${bookingDate}
 ⏰ *Time Slot:* ${bookingTimeSlot}
-${patientNotes.trim() ? `📝 *Notes/Symptoms:* ${patientNotes.trim()}` : ""}
-
+${patientNotes.trim() ? `📝 *Notes/Symptoms:* ${patientNotes.trim()}\n` : ""}
 Please confirm my appointment serial. Thank you!`;
+  };
+
+  const handleOpenPrintSlip = () => {
+    if (!patientName.trim()) {
+      showToast(
+        isBn ? "রোগীর নাম প্রয়োজন" : "Name Required",
+        isBn
+          ? "প্রিন্ট স্লিপ তৈরি করতে অনুগ্রহ করে প্রথমে আপনার নাম প্রদান করুন।"
+          : "Please enter your name first to preview and print your serial slip."
+      );
+      document.getElementById("patientName")?.focus();
+      return;
+    }
+    if (!patientPhone.trim() || patientPhone.trim().length < 6) {
+      showToast(
+        isBn ? "মোবাইল নম্বর প্রয়োজন" : "Phone Required",
+        isBn
+          ? "প্রিন্ট স্লিপে যুক্ত করার জন্য আপনার মোবাইল নম্বর প্রদান করুন।"
+          : "Please enter your mobile phone number first to preview and print your serial slip."
+      );
+      document.getElementById("patientPhone")?.focus();
+      return;
+    }
+
+    setSlipIsConfirmed(false);
+    setIsSlipModalOpen(true);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!patientName.trim()) {
+      showToast(
+        isBn ? "রোগীর নাম প্রয়োজন" : "Name Required",
+        isBn ? "অনুগ্রহ করে রোগীর সম্পূর্ণ নাম লিখুন।" : "Please enter the patient's full name."
+      );
+      document.getElementById("patientName")?.focus();
+      return;
+    }
+
+    if (!patientPhone.trim() || patientPhone.trim().length < 6) {
+      showToast(
+        isBn ? "মোবাইল নম্বর প্রয়োজন" : "Phone Required",
+        isBn ? "অনুগ্রহ করে সঠিক মোবাইল নম্বর দিন।" : "Please enter a valid mobile phone number."
+      );
+      document.getElementById("patientPhone")?.focus();
+      return;
+    }
+
     setIsSubmitting(true);
 
     let finalSerial = serialId;
@@ -183,6 +234,7 @@ Please confirm my appointment serial. Thank you!`;
           patientName,
           patientPhone,
           patientAge,
+          patientAddress,
           branchKey: selectedBranch,
           serviceId: selectedServiceId,
           serviceTitle,
@@ -214,6 +266,10 @@ Please confirm my appointment serial. Thank you!`;
     );
 
     window.open(url, "_blank", "noopener,noreferrer");
+
+    // Open the official confirmation slip modal
+    setSlipIsConfirmed(true);
+    setIsSlipModalOpen(true);
   };
 
   const handleCopy = () => {
@@ -231,6 +287,25 @@ Please confirm my appointment serial. Thank you!`;
       .catch(() => {
         showToast("Ready", "Please click the WhatsApp button to send your serial.");
       });
+  };
+
+  const slipData: AppointmentSlipData = {
+    serialId,
+    patientName: patientName.trim() || (isBn ? "রোগীর নাম" : "Patient Name"),
+    patientAge: patientAge.trim() || undefined,
+    patientPhone: patientPhone.trim() || (isBn ? "মোবাইল নম্বর" : "Mobile Phone"),
+    patientAddress: patientAddress.trim() || undefined,
+    branchName: isBn ? bInfo.nameBn : bInfo.nameEn,
+    branchAddress: isBn ? bInfo.addressBn : bInfo.addressEn,
+    branchHours: isBn ? bInfo.shiftBadgeBn : bInfo.shiftBadgeEn,
+    serviceTitle: isBn ? selectedServiceObj.titleBn : selectedServiceObj.titleEn,
+    serviceDuration: isBn ? selectedServiceObj.durationBn : selectedServiceObj.durationEn,
+    appointmentDate: bookingDate,
+    timeSlot: bookingTimeSlot,
+    patientNotes: patientNotes.trim() || undefined,
+    hotline,
+    whatsappNumber,
+    whatsappUrl: getWhatsAppLink(buildFormattedBookingText()),
   };
 
   return (
@@ -312,63 +387,92 @@ Please confirm my appointment serial. Thank you!`;
               </div>
             </div>
 
-            {/* Step 2: Patient Name, Age & Phone */}
-            <div className="grid grid-cols-1 sm:grid-cols-12 gap-4">
-              <div className="sm:col-span-6 space-y-1.5">
-                <label
-                  htmlFor="patientName"
-                  className="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200"
-                >
-                  <span>{t("formNameLabel")}</span>
-                  <span className="text-rose-500 ml-1">*</span>
-                </label>
-                <input
-                  type="text"
-                  id="patientName"
-                  required
-                  value={patientName}
-                  onChange={(e) => setPatientName(e.target.value)}
-                  placeholder={isBn ? "যেমন: মোঃ রফিকুল ইসলাম" : "e.g. Md. Rafiqul Islam"}
-                  className="w-full apple-input rounded-xl px-4 py-3 text-sm font-medium"
-                />
+            {/* Step 2: Patient Name, Age, Phone & Address */}
+            <div className="space-y-3">
+              <div className="grid grid-cols-1 sm:grid-cols-12 gap-4">
+                <div className="sm:col-span-6 space-y-1.5">
+                  <label
+                    htmlFor="patientName"
+                    className="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200"
+                  >
+                    <span>{t("formNameLabel")}</span>
+                    <span className="text-rose-500 ml-1">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="patientName"
+                    required
+                    value={patientName}
+                    onChange={(e) => setPatientName(e.target.value)}
+                    placeholder={isBn ? "যেমন: মোঃ রফিকুল ইসলাম" : "e.g. Md. Rafiqul Islam"}
+                    className="w-full apple-input rounded-xl px-4 py-3 text-sm font-medium"
+                  />
+                </div>
+
+                <div className="sm:col-span-2 space-y-1.5">
+                  <label
+                    htmlFor="patientAge"
+                    className="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200"
+                  >
+                    <span>{t("formAgeLabel")}</span>
+                  </label>
+                  <input
+                    type="number"
+                    id="patientAge"
+                    min="1"
+                    max="110"
+                    value={patientAge}
+                    onChange={(e) => setPatientAge(e.target.value)}
+                    placeholder={isBn ? "২৮" : "28"}
+                    className="w-full apple-input rounded-xl px-3 py-3 text-sm font-medium"
+                  />
+                </div>
+
+                <div className="sm:col-span-4 space-y-1.5">
+                  <label
+                    htmlFor="patientPhone"
+                    className="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200"
+                  >
+                    <span>{t("formPhoneLabel")}</span>
+                    <span className="text-rose-500 ml-1">*</span>
+                  </label>
+                  <input
+                    type="tel"
+                    id="patientPhone"
+                    required
+                    value={patientPhone}
+                    onChange={(e) => setPatientPhone(e.target.value)}
+                    placeholder="017XXXXXXXX"
+                    className="w-full apple-input rounded-xl px-4 py-3 text-sm font-medium"
+                  />
+                </div>
               </div>
 
-              <div className="sm:col-span-2 space-y-1.5">
+              {/* Patient Address / Area field */}
+              <div className="space-y-1.5">
                 <label
-                  htmlFor="patientAge"
-                  className="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200"
+                  htmlFor="patientAddress"
+                  className="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 flex items-center justify-between"
                 >
-                  <span>{t("formAgeLabel")}</span>
+                  <span className="flex items-center gap-1.5">
+                    <i className="ph-fill ph-map-pin text-sky-500" />
+                    <span>{t("formAddressLabel")}</span>
+                  </span>
+                  <span className="text-[11px] font-normal text-slate-500 dark:text-slate-400">
+                    {isBn ? "(স্লিপ ও হোয়াটসঅ্যাপে যুক্ত হবে)" : "(Included in Slip)"}
+                  </span>
                 </label>
-                <input
-                  type="number"
-                  id="patientAge"
-                  min="1"
-                  max="110"
-                  value={patientAge}
-                  onChange={(e) => setPatientAge(e.target.value)}
-                  placeholder={isBn ? "২৮" : "28"}
-                  className="w-full apple-input rounded-xl px-3 py-3 text-sm font-medium"
-                />
-              </div>
-
-              <div className="sm:col-span-4 space-y-1.5">
-                <label
-                  htmlFor="patientPhone"
-                  className="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200"
-                >
-                  <span>{t("formPhoneLabel")}</span>
-                  <span className="text-rose-500 ml-1">*</span>
-                </label>
-                <input
-                  type="tel"
-                  id="patientPhone"
-                  required
-                  value={patientPhone}
-                  onChange={(e) => setPatientPhone(e.target.value)}
-                  placeholder="017XXXXXXXX"
-                  className="w-full apple-input rounded-xl px-4 py-3 text-sm font-medium"
-                />
+                <div className="relative">
+                  <i className="ph-fill ph-house-line absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-base pointer-events-none" />
+                  <input
+                    type="text"
+                    id="patientAddress"
+                    value={patientAddress}
+                    onChange={(e) => setPatientAddress(e.target.value)}
+                    placeholder={t("formAddressPlaceholder")}
+                    className="w-full apple-input rounded-xl pl-10 pr-4 py-2.5 text-sm font-medium"
+                  />
+                </div>
               </div>
             </div>
 
@@ -624,6 +728,16 @@ Please confirm my appointment serial. Thank you!`;
                 </p>
               </div>
 
+              {/* Patient Address Preview (if specified) */}
+              {patientAddress.trim() && (
+                <div className="apple-glass-subtle rounded-xl p-2.5 flex items-center gap-2 text-xs">
+                  <i className="ph-fill ph-map-pin text-sky-500 shrink-0 text-sm" />
+                  <span className="text-slate-700 dark:text-slate-300 truncate font-medium">
+                    {patientAddress.trim()}
+                  </span>
+                </div>
+              )}
+
               {/* Pass Footer & Print Action */}
               <div className="pt-3 border-t border-dashed border-slate-300 dark:border-slate-700 flex items-center justify-between gap-2 text-xs">
                 <div>
@@ -634,10 +748,11 @@ Please confirm my appointment serial. Thank you!`;
                 </div>
                 <button
                   type="button"
-                  onClick={() => window.print()}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl apple-glass-subtle hover:bg-sky-500 hover:text-white font-bold transition-colors"
+                  onClick={handleOpenPrintSlip}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl apple-glass-subtle hover:bg-sky-500 hover:text-white font-bold transition-all shadow-sm cursor-pointer active:scale-95"
+                  title={isBn ? "সিরিয়াল স্লিপ প্রিভিউ ও প্রিন্ট করুন" : "Preview and print serial pass"}
                 >
-                  <i className="ph-bold ph-printer" />
+                  <i className="ph-bold ph-printer text-base" />
                   <span>{t("tokenPrintBtn")}</span>
                 </button>
               </div>
@@ -645,6 +760,14 @@ Please confirm my appointment serial. Thank you!`;
           </div>
         </div>
       </div>
+
+      {/* Official Printable Appointment Slip Modal */}
+      <AppointmentSlipModal
+        isOpen={isSlipModalOpen}
+        onClose={() => setIsSlipModalOpen(false)}
+        data={slipData}
+        isConfirmed={slipIsConfirmed}
+      />
     </section>
   );
 };

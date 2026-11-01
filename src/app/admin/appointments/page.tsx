@@ -14,6 +14,7 @@ interface AppointmentItem {
   serviceTitle: string;
   appointmentDate: string;
   timeSlot: string;
+  patientNotes?: string | null;
   status: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED";
   doctorNotes: string | null;
   createdAt: string;
@@ -403,6 +404,14 @@ export default function AdminAppointmentsPage() {
                       <span>{apt.patientPhone}</span>
                     </a>
                   </div>
+
+                  {/* Patient Address / Notes Display */}
+                  {apt.patientNotes && (
+                    <div className="mt-2 p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 text-xs text-slate-300 flex items-start gap-2">
+                      <i className="ph-fill ph-note-pencil text-sky-400 text-sm shrink-0 mt-0.5" />
+                      <span className="whitespace-pre-line leading-relaxed font-sans">{apt.patientNotes}</span>
+                    </div>
+                  )}
                 </div>
 
                 {/* Right: Actions */}
