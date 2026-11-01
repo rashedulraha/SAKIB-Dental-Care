@@ -4,15 +4,16 @@
     transform: scale(1) translate(0, 0);
   }
   50% {
-    transform: scale(1.08) translate(-1%, -1%);
+    transform: scale(1.05) translate(-0.5%, -0.5%);
   }
   100% {
-    transform: scale(1.02) translate(0, 0);
+    transform: scale(1.01) translate(0, 0);
   }
 }
 
 .hero-media-zoom {
-  animation: kenBurnsZoom 22s ease-in-out infinite;
+  animation: kenBurnsZoom 24s ease-in-out infinite;
+  will-change: transform;
 }
 
 .hero-media-paused {

@@ -11,7 +11,6 @@ export const Hero: React.FC = () => {
   const [currentSlideIndex, setCurrentSlideIndex] = useState<number>(0);
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [isMuted, setIsMuted] = useState<boolean>(true);
-  const [watermarkFlashed, setWatermarkFlashed] = useState<boolean>(false);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const slide = heroSlides[currentSlideIndex];
@@ -24,12 +23,12 @@ export const Hero: React.FC = () => {
     setCurrentSlideIndex((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
   }, []);
 
-  // Auto-advance timer
+  // Auto-advance timer (8s per slide for relaxed visual absorption)
   useEffect(() => {
     if (!isPlaying) return;
     const timer = setInterval(() => {
       handleNextSlide();
-    }, 7500);
+    }, 8000);
     return () => clearInterval(timer);
   }, [isPlaying, handleNextSlide]);
 
@@ -59,8 +58,6 @@ export const Hero: React.FC = () => {
           videoRef.current.pause();
         }
       }
-      setWatermarkFlashed(true);
-      setTimeout(() => setWatermarkFlashed(false), 600);
       return next;
     });
   };
@@ -113,173 +110,169 @@ export const Hero: React.FC = () => {
   return (
     <section
       id="hero"
-      className="relative w-full min-h-[calc(100vh-78px)] flex items-center justify-center overflow-hidden bg-slate-950 select-none py-12 sm:py-16"
+      className="relative w-full min-h-[82vh] sm:min-h-[88vh] lg:min-h-[92vh] flex items-center justify-center overflow-hidden bg-[#040814] select-none pt-12 pb-20 sm:py-24"
     >
-      {/* Background Media Layer (Video + High-Res Slides with Ken-Burns Motion) */}
+      {/* ============================================================== */}
+      {/* BACKGROUND MEDIA LAYER: VIBRANT, CRYSTAL-CLEAR CLINIC VISUALS   */}
+      {/* ============================================================== */}
       <div className="absolute inset-0 z-0 overflow-hidden">
-        {/* Ambient Clinical Dental Video Layer */}
-        <video
-          ref={videoRef}
-          autoPlay
-          loop
-          muted={isMuted}
-          playsInline
-          preload="auto"
-          poster="https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=1920&q=85"
-          className={`w-full h-full object-cover hero-media-zoom transition-opacity duration-1000 ${
-            !isPlaying ? "hero-media-paused" : ""
-          } ${slide.type === "video" ? "opacity-90" : "opacity-0"}`}
-        >
-          <source
-            src={
-              slide.type === "video"
-                ? slide.videoUrl
-                : "https://assets.mixkit.co/videos/preview/mixkit-dentist-examining-a-patients-teeth-41677-large.mp4"
-            }
-            type="video/mp4"
-          />
-        </video>
+        {/* Ambient Dental Video Layer */}
+        {slide.type === "video" && slide.videoUrl && (
+          <video
+            ref={videoRef}
+            autoPlay
+            loop
+            muted={isMuted}
+            playsInline
+            preload="auto"
+            poster={slide.imageUrl}
+            className={`absolute inset-0 w-full h-full object-cover hero-media-zoom transition-opacity duration-1000 ${
+              !isPlaying ? "hero-media-paused" : ""
+            } opacity-90`}
+          >
+            <source src={slide.videoUrl} type="video/mp4" />
+          </video>
+        )}
 
-        {/* High-Resolution Image Overlay Layer for Slide Transitions & Fallback */}
+        {/* High-Resolution Hero Background Image Layer (Natural Color, Crisp Definition) */}
         <img
           id="heroBackgroundImage"
           src={slide.imageUrl}
           alt="Sakib Dental Care Modern Clinic"
-          className={`absolute inset-0 w-full h-full object-cover hero-media-zoom transition-opacity duration-1000 mix-blend-luminosity ${
+          className={`absolute inset-0 w-full h-full object-cover hero-media-zoom transition-all duration-1000 ${
             !isPlaying ? "hero-media-paused" : ""
-          } ${slide.type === "video" ? "opacity-35" : "opacity-85"}`}
+          } ${slide.type === "video" ? "opacity-35" : "opacity-95"}`}
         />
 
-        {/* Cinematic Dark Vignette & Radial Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050914]/85 via-[#070d1f]/65 to-[#050914]/90" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_15%,rgba(4,8,19,0.78)_100%)]" />
+        {/* Directional Filmic Scrim & Edge Vignettes (Keeps center image open & bright, darkens text zone) */}
+        {/* 1. Subtle top header scrim for transparent navbar contrast */}
+        <div className="absolute inset-x-0 top-0 h-44 bg-gradient-to-b from-[#030712]/80 via-[#030712]/25 to-transparent pointer-events-none" />
+
+        {/* 2. Progressive bottom-up scrim specifically framing the text and CTA area */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#040814] via-[#040814]/75 via-40% via-[#040814]/20 via-75% to-transparent pointer-events-none" />
+
+        {/* 3. Soft peripheral radial vignette to gently frame wide displays without drowning image details */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(4,8,20,0.65)_100%)] pointer-events-none" />
       </div>
 
-      {/* Center Pause/Play Watermark Icon */}
-      <div
-        id="heroCenterWatermark"
-        className={`pointer-events-none absolute inset-0 flex items-center justify-center z-10 transition-opacity duration-500 ${
-          watermarkFlashed ? "opacity-45" : "opacity-15"
-        }`}
-      >
-        <i
-          id="heroCenterWatermarkIcon"
-          className={`ph-fill ${
-            isPlaying ? "ph-pause" : "ph-play"
-          } text-white text-5xl sm:text-7xl`}
-        />
-      </div>
-
-      {/* Centered Hero Content Container */}
-      <div className="relative z-20 max-w-4xl mx-auto px-4 sm:px-6 text-center flex flex-col items-center space-y-5 sm:space-y-6">
-        {/* Top Dark Glass Pill Badge with Amber Dot */}
-        <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-[#0d1527]/85 border border-white/15 backdrop-blur-md shadow-lg">
-          <span className="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_8px_#fbbf24] shrink-0" />
+      {/* ============================================================== */}
+      {/* HERO CONTENT CONTAINER: CLEAN TYPOGRAPHY & REFINED HIERARCHY   */}
+      {/* ============================================================== */}
+      <div className="relative z-20 max-w-4xl mx-auto px-4 sm:px-6 text-center flex flex-col items-center space-y-4 sm:space-y-6">
+        {/* Top Minimalist Pill Badge with Soft Pulse Accent */}
+        <div className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full bg-slate-900/60 border border-white/20 backdrop-blur-md shadow-sm">
+          <span className="w-2 h-2 rounded-full bg-sky-400 shadow-[0_0_8px_#38bdf8] shrink-0 animate-pulse" />
           <span
             id="heroSlideBadge"
-            className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-amber-400"
+            className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-sky-300"
           >
             {badgeText}
           </span>
         </div>
 
-        {/* Main Display Headline */}
+        {/* Main Display Headline (Apple Inter Display Hierarchy) */}
         <h1
           id="heroMainTitle"
-          className="text-3xl sm:text-5xl md:text-6xl lg:text-[68px] font-extrabold text-white tracking-tight leading-tight sm:leading-[1.16] drop-shadow-2xl max-w-4xl"
+          className="text-3xl sm:text-5xl md:text-6xl lg:text-[66px] font-black text-white tracking-tight leading-[1.12] sm:leading-[1.12] drop-shadow-[0_4px_24px_rgba(0,0,0,0.75)] max-w-4xl"
         >
           {renderTitle()}
         </h1>
 
-        {/* Centered Subtitle Paragraph */}
+        {/* Balanced, Highly Legible Subtitle */}
         <p
           id="heroSlideSubtitle"
-          className="text-xs sm:text-base md:text-lg text-slate-200/90 font-medium leading-relaxed max-w-2xl drop-shadow"
+          className="text-xs sm:text-base md:text-lg text-slate-100/90 font-normal leading-relaxed max-w-2xl drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]"
         >
           {renderSubtitle()}
         </p>
 
-        {/* Dual Centered Pill CTA Buttons */}
-        <div className="flex flex-col xs:flex-row items-center justify-center gap-3 sm:gap-4 pt-2 sm:pt-3 w-full xs:w-auto">
+        {/* Dual Primary & Secondary Action Pill Buttons */}
+        <div className="flex flex-col xs:flex-row items-center justify-center gap-3 sm:gap-4 pt-1 sm:pt-2 w-full xs:w-auto">
           <a
             href="#services"
-            className="w-full xs:w-auto inline-flex items-center justify-center gap-2.5 bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-bold text-xs sm:text-base px-6 sm:px-7 py-3 sm:py-3.5 rounded-full shadow-xl shadow-blue-600/30 transition-all hover:scale-105"
+            className="w-full xs:w-auto inline-flex items-center justify-center gap-2.5 bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 hover:from-sky-400 hover:to-blue-500 text-white font-bold text-xs sm:text-base px-6 sm:px-8 py-3.5 rounded-full shadow-lg shadow-sky-500/25 transition-all hover:scale-[1.02] active:scale-95"
           >
             <span>{t("heroPrimaryCta")}</span>
             <i className="ph-bold ph-arrow-right text-base" />
           </a>
           <a
             href="#booking"
-            className="w-full xs:w-auto inline-flex items-center justify-center gap-2.5 bg-white/15 hover:bg-white/25 text-white font-bold text-xs sm:text-base px-6 sm:px-7 py-3 sm:py-3.5 rounded-full border border-white/25 backdrop-blur-xl shadow-xl transition-all hover:scale-105"
+            className="w-full xs:w-auto inline-flex items-center justify-center gap-2.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs sm:text-base px-6 sm:px-8 py-3.5 rounded-full border border-white/20 backdrop-blur-xl shadow-lg transition-all hover:scale-[1.02] active:scale-95"
           >
+            <i className="ph-fill ph-calendar-plus text-sky-400 text-base" />
             <span>{t("heroSecondaryCta")}</span>
           </a>
         </div>
 
-        {/* Compact Quick Branch Schedule Pills under CTAs */}
-        <div className="pt-3 sm:pt-4 flex flex-wrap items-center justify-center gap-2 text-[11px] sm:text-xs text-slate-200/90">
+        {/* Refined Quick Branch Schedule Chips (Live Status Indicators) */}
+        <div className="pt-2 flex flex-wrap items-center justify-center gap-2 text-[11px] sm:text-xs">
           <button
             type="button"
             onClick={() => quickSelectBranch("nawhata")}
-            className="px-3 sm:px-3.5 py-1.5 rounded-full bg-black/45 hover:bg-sky-500/30 border border-white/15 backdrop-blur-md flex items-center gap-1.5 sm:gap-2 transition-all text-left"
+            className="px-3 py-1.5 rounded-full bg-slate-900/60 hover:bg-slate-800/80 border border-white/15 backdrop-blur-md flex items-center gap-2 text-slate-200 transition-all cursor-pointer group"
           >
-            <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
+            <span className="w-2 h-2 rounded-full bg-emerald-400 group-hover:scale-125 transition-transform shrink-0" />
             <span>
-              <strong className="font-bold">{nawhataName}:</strong> {nawhataHours}
+              <span className="font-semibold text-white">{nawhataName}:</span>{" "}
+              <span className="text-slate-300">{nawhataHours}</span>
             </span>
           </button>
           <button
             type="button"
             onClick={() => quickSelectBranch("city")}
-            className="px-3 sm:px-3.5 py-1.5 rounded-full bg-black/45 hover:bg-indigo-500/30 border border-white/15 backdrop-blur-md flex items-center gap-1.5 sm:gap-2 transition-all text-left"
+            className="px-3 py-1.5 rounded-full bg-slate-900/60 hover:bg-slate-800/80 border border-white/15 backdrop-blur-md flex items-center gap-2 text-slate-200 transition-all cursor-pointer group"
           >
-            <span className="w-2 h-2 rounded-full bg-indigo-400 shrink-0" />
+            <span className="w-2 h-2 rounded-full bg-sky-400 group-hover:scale-125 transition-transform shrink-0" />
             <span>
-              <strong className="font-bold">{cityName}:</strong> {cityHours}
+              <span className="font-semibold text-white">{cityName}:</span>{" "}
+              <span className="text-slate-300">{cityHours}</span>
             </span>
           </button>
         </div>
       </div>
 
-      {/* BOTTOM-LEFT SLIDE COUNTER PILL */}
-      <div className="absolute bottom-4 sm:bottom-8 left-3 sm:left-10 z-30 flex items-center gap-2 sm:gap-3">
-        <div className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-[#0a0f1d]/80 border border-white/15 backdrop-blur-xl text-xs sm:text-sm font-mono font-bold tracking-wider shadow-lg flex items-center gap-1.5">
-          <span id="heroSlideCurrentNum" className="text-amber-400">
+      {/* ============================================================== */}
+      {/* BOTTOM CONTROLS: STREAMLINED SLIDE COUNTER & MEDIA BAR          */}
+      {/* ============================================================== */}
+      {/* Bottom-Left Slide Index Indicator */}
+      <div className="absolute bottom-4 sm:bottom-6 left-3 sm:left-10 z-30 flex items-center gap-2 sm:gap-3">
+        <div className="px-3 sm:px-3.5 py-1.5 rounded-full bg-slate-900/60 border border-white/15 backdrop-blur-md text-xs sm:text-sm font-mono font-bold tracking-wider shadow-sm flex items-center gap-1.5">
+          <span id="heroSlideCurrentNum" className="text-sky-400">
             {slide.num}
           </span>
           <span className="text-slate-500">/</span>
-          <span className="text-slate-300">04</span>
+          <span className="text-slate-400">04</span>
         </div>
         <span
           id="heroSlideCaptionTag"
-          className="hidden md:inline-block text-xs font-semibold text-slate-300/85 bg-black/40 px-3 py-1.5 rounded-full border border-white/10 backdrop-blur-md"
+          className="hidden md:inline-block text-xs font-medium text-slate-300 bg-slate-900/50 px-3 py-1.5 rounded-full border border-white/10 backdrop-blur-md"
         >
           {captionText}
         </span>
       </div>
 
-      {/* BOTTOM-RIGHT MEDIA CONTROL CLUSTER */}
-      <div className="absolute bottom-4 sm:bottom-8 right-3 sm:right-24 z-30 flex items-center gap-1.5 sm:gap-2">
+      {/* Bottom-Right Streamlined Media Navigation Pill */}
+      <div className="absolute bottom-4 sm:bottom-6 right-3 sm:right-10 z-30 flex items-center gap-1.5 sm:gap-2">
         {/* Previous Slide Button */}
         <button
           type="button"
           onClick={handlePrevSlide}
           aria-label="Previous Slide"
-          className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#0a0f1d]/80 hover:bg-white/20 border border-white/15 backdrop-blur-xl text-white flex items-center justify-center transition-all hover:scale-105 shadow-lg"
+          className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-slate-900/60 hover:bg-white/20 border border-white/15 backdrop-blur-md text-white flex items-center justify-center transition-all hover:scale-105 cursor-pointer shadow-sm"
         >
           <i className="ph-bold ph-caret-left text-xs sm:text-sm" />
         </button>
 
-        {/* Play / Pause Pill Button */}
+        {/* Play / Pause Button */}
         <button
           type="button"
           id="heroPlayPauseBtn"
           onClick={togglePlayPause}
-          className="px-2.5 sm:px-4 py-1.5 sm:py-2.5 rounded-full bg-[#0a0f1d]/80 hover:bg-white/20 border border-white/15 backdrop-blur-xl text-white text-[11px] sm:text-xs font-bold flex items-center gap-1.5 sm:gap-2 transition-all shadow-lg"
+          className="px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-slate-900/60 hover:bg-white/20 border border-white/15 backdrop-blur-md text-white text-[11px] sm:text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-sm"
         >
           <i
             id="heroPlayPauseIcon"
-            className={`ph-bold ${isPlaying ? "ph-pause" : "ph-play"} text-xs sm:text-sm`}
+            className={`ph-bold ${isPlaying ? "ph-pause" : "ph-play"} text-xs`}
           />
           <span id="heroPlayPauseText" className="hidden xs:inline">
             {isPlaying
@@ -292,36 +285,38 @@ export const Hero: React.FC = () => {
           </span>
         </button>
 
-        {/* Mute / Unmute Pill Button */}
-        <button
-          type="button"
-          id="heroMuteBtn"
-          onClick={toggleMute}
-          className="px-2.5 sm:px-4 py-1.5 sm:py-2.5 rounded-full bg-[#0a0f1d]/80 hover:bg-white/20 border border-white/15 backdrop-blur-xl text-white text-[11px] sm:text-xs font-bold flex items-center gap-1.5 sm:gap-2 transition-all shadow-lg"
-        >
-          <i
-            id="heroMuteIcon"
-            className={`ph-bold ${
-              isMuted ? "ph-speaker-simple-slash" : "ph-speaker-high text-emerald-400"
-            } text-xs sm:text-sm`}
-          />
-          <span id="heroMuteText" className="hidden xs:inline">
-            {isMuted
-              ? currentLang === "bn"
-                ? "মিউট"
-                : "Muted"
-              : currentLang === "bn"
-              ? "সাউন্ড"
-              : "Audio On"}
-          </span>
-        </button>
+        {/* Mute / Unmute Button (for video slides) */}
+        {slide.type === "video" && (
+          <button
+            type="button"
+            id="heroMuteBtn"
+            onClick={toggleMute}
+            className="px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-slate-900/60 hover:bg-white/20 border border-white/15 backdrop-blur-md text-white text-[11px] sm:text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-sm"
+          >
+            <i
+              id="heroMuteIcon"
+              className={`ph-bold ${
+                isMuted ? "ph-speaker-simple-slash" : "ph-speaker-high text-emerald-400"
+              } text-xs`}
+            />
+            <span id="heroMuteText" className="hidden xs:inline">
+              {isMuted
+                ? currentLang === "bn"
+                  ? "মিউট"
+                  : "Muted"
+                : currentLang === "bn"
+                ? "সাউন্ড"
+                : "Audio"}
+            </span>
+          </button>
+        )}
 
         {/* Next Slide Button */}
         <button
           type="button"
           onClick={handleNextSlide}
           aria-label="Next Slide"
-          className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#0a0f1d]/80 hover:bg-white/20 border border-white/15 backdrop-blur-xl text-white flex items-center justify-center transition-all hover:scale-105 shadow-lg"
+          className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-slate-900/60 hover:bg-white/20 border border-white/15 backdrop-blur-md text-white flex items-center justify-center transition-all hover:scale-105 cursor-pointer shadow-sm"
         >
           <i className="ph-bold ph-caret-right text-xs sm:text-sm" />
         </button>
