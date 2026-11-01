@@ -1,11 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useLanguage } from "@/context/LanguageContext";
 import { useToast } from "@/context/ToastContext";
+import { useClinic } from "@/context/ClinicContext";
 import { dentalServices } from "@/data/services";
 import { branchDetails } from "@/data/branches";
 import { toBanglaDigits } from "@/data/translations";
+import { CustomSelect } from "@/components/common/CustomSelect";
 
 export const BookingSection: React.FC = () => {
   const {
@@ -17,6 +19,7 @@ export const BookingSection: React.FC = () => {
     setSelectedServiceId,
   } = useLanguage();
   const { showToast } = useToast();
+  const { whatsappNumber, hotline, getWhatsAppLink } = useClinic();
 
   const [patientName, setPatientName] = useState<string>("");
   const [patientAge, setPatientAge] = useState<string>("");
@@ -26,6 +29,7 @@ export const BookingSection: React.FC = () => {
   const [patientNotes, setPatientNotes] = useState<string>("");
   const [serialId, setSerialId] = useState<string>("#SDC-2601");
   const [isFridayWarning, setIsFridayWarning] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   // Initialize date and serial ID on client mount
   useEffect(() => {
@@ -46,20 +50,82 @@ export const BookingSection: React.FC = () => {
     }
   }, [selectedBranch, currentLang, slots]);
 
-  // Check Friday warning
+  // Check Friday warning (both branches closed on Friday)
   useEffect(() => {
-    if (bookingDate && selectedBranch === "nawhata") {
+    if (bookingDate) {
       const chosen = new Date(bookingDate);
       setIsFridayWarning(chosen.getDay() === 5);
     } else {
       setIsFridayWarning(false);
     }
-  }, [bookingDate, selectedBranch]);
+  }, [bookingDate]);
 
   const selectedServiceObj =
     dentalServices.find((s) => s.id === selectedServiceId) || dentalServices[0];
 
-  const buildFormattedBookingText = () => {
+  const isBn = currentLang === "bn";
+
+  // Service Options for Custom Select
+  const serviceOptions = useMemo(() => {
+    return dentalServices.map((s) => {
+      const label = isBn
+        ? `${toBanglaDigits(s.id)}. ${s.titleBn}`
+        : currentLang === "en"
+        ? `${s.id}. ${s.titleEn}`
+        : `${s.id}. ${s.titleEn} (${s.titleBn})`;
+
+      const subLabel = isBn
+        ? `সময়: ${s.durationBn} • ${s.category}`
+        : `Duration: ${s.durationEn} • ${s.category}`;
+
+      return {
+        value: s.id,
+        label,
+        subLabel,
+        icon: s.icon || "ph-tooth",
+        iconColor: "text-sky-500 dark:text-sky-400",
+        badge: isBn ? s.durationBn : s.durationEn,
+      };
+    });
+  }, [isBn, currentLang]);
+
+  // Helper for smart Time Slot metadata (icons & badges)
+  const getTimeSlotMeta = (slot: string) => {
+    const lower = slot.toLowerCase();
+    if (lower.includes("morning") || slot.includes("সকাল")) {
+      return { icon: "ph-sun-dim", iconColor: "text-amber-500", badge: isBn ? "সকাল" : "Morning" };
+    }
+    if (lower.includes("noon") || slot.includes("দুপুর")) {
+      return { icon: "ph-sun", iconColor: "text-amber-400", badge: isBn ? "দুপুর" : "Noon" };
+    }
+    if (lower.includes("afternoon") || slot.includes("বিকাল")) {
+      return { icon: "ph-sun-horizon", iconColor: "text-orange-500", badge: isBn ? "বিকাল" : "Afternoon" };
+    }
+    if (lower.includes("evening") || slot.includes("সন্ধ্যা")) {
+      return { icon: "ph-cloud-sun", iconColor: "text-indigo-400", badge: isBn ? "সন্ধ্যা" : "Evening" };
+    }
+    if (lower.includes("night") || slot.includes("রাত")) {
+      return { icon: "ph-moon-stars", iconColor: "text-sky-400", badge: isBn ? "রাত" : "Night" };
+    }
+    return { icon: "ph-clock", iconColor: "text-sky-500", badge: undefined };
+  };
+
+  // Time Slot Options for Custom Select
+  const timeSlotOptions = useMemo(() => {
+    return slots.map((slot) => {
+      const meta = getTimeSlotMeta(slot);
+      return {
+        value: slot,
+        label: slot,
+        icon: meta.icon,
+        iconColor: meta.iconColor,
+        badge: meta.badge,
+      };
+    });
+  }, [slots, isBn]);
+
+  const buildFormattedBookingText = (customSerial?: string) => {
+    const activeSerial = customSerial || serialId;
     const name = patientName.trim() || "Not specified";
     const age = patientAge.trim() || "-";
     const phone = patientPhone.trim() || "Not specified";
@@ -72,7 +138,7 @@ export const BookingSection: React.FC = () => {
       return `আসসালামু আলাইকুম,
 আমি *সাকিব ডেন্টাল কেয়ার (Sakib Dental Care)*-এ একটি অ্যাপয়েন্টমেন্ট / সিরিয়াল নিতে চাই:
 
-📋 *সিরিয়াল আইডি:* ${serialId}
+📋 *সিরিয়াল আইডি:* ${activeSerial}
 🏥 *নির্বাচিত শাখা:* ${branchName}
 📍 *ঠিকানা:* ${branchAddress}
 👤 *রোগীর নাম:* ${name} (বয়স: ${age})
@@ -88,7 +154,7 @@ ${patientNotes.trim() ? `📝 *সমস্যার বিবরণ:* ${patient
     return `Assalamu Alaikum / Hello,
 I would like to book a dental appointment at *Sakib Dental Care (সাকিব ডেন্টাল কেয়ার)*:
 
-📋 *Serial ID:* ${serialId}
+📋 *Serial ID:* ${activeSerial}
 🏥 *Selected Branch:* ${bInfo.nameEn} (${bInfo.nameBn})
 📍 *Location:* ${bInfo.addressEn}
 👤 *Patient Name:* ${name} (Age: ${age})
@@ -101,17 +167,50 @@ ${patientNotes.trim() ? `📝 *Notes/Symptoms:* ${patientNotes.trim()}` : ""}
 Please confirm my appointment serial. Thank you!`;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const message = buildFormattedBookingText();
-    const encoded = encodeURIComponent(message);
-    const url = `https://wa.me/8801733054717?text=${encoded}`;
+    setIsSubmitting(true);
+
+    let finalSerial = serialId;
+    const serviceTitle =
+      currentLang === "bn" ? selectedServiceObj.titleBn : selectedServiceObj.titleEn;
+
+    try {
+      const res = await fetch("/api/appointments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          patientName,
+          patientPhone,
+          patientAge,
+          branchKey: selectedBranch,
+          serviceId: selectedServiceId,
+          serviceTitle,
+          appointmentDate: bookingDate,
+          timeSlot: bookingTimeSlot,
+          patientNotes,
+        }),
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success && data.serialId) {
+        finalSerial = data.serialId;
+        setSerialId(data.serialId);
+      }
+    } catch (err) {
+      console.warn("Neon DB async save skipped or network error, proceeding with WhatsApp:", err);
+    } finally {
+      setIsSubmitting(false);
+    }
+
+    const message = buildFormattedBookingText(finalSerial);
+    const url = getWhatsAppLink(message);
 
     showToast(
       currentLang === "bn" ? "WhatsApp ওপেন হচ্ছে!" : "Opening WhatsApp!",
       currentLang === "bn"
-        ? "আপনার সিরিয়ালের সকল তথ্য WhatsApp মেসেজে প্রস্তুত করা হয়েছে।"
-        : "Your appointment serial slip has been formatted for WhatsApp (01733-054717)."
+        ? `আপনার সিরিয়াল (${finalSerial}) ডাটাবেজে সংরক্ষিত হয়েছে এবং WhatsApp প্রস্তুত।`
+        : `Your appointment serial (${finalSerial}) has been saved in the database and formatted for WhatsApp.`
     );
 
     window.open(url, "_blank", "noopener,noreferrer");
@@ -133,8 +232,6 @@ Please confirm my appointment serial. Thank you!`;
         showToast("Ready", "Please click the WhatsApp button to send your serial.");
       });
   };
-
-  const isBn = currentLang === "bn";
 
   return (
     <section id="booking" className="scroll-mt-24">
@@ -285,22 +382,15 @@ Please confirm my appointment serial. Thank you!`;
                   <span>{t("formServiceLabel")}</span>
                   <span className="text-rose-500 ml-1">*</span>
                 </label>
-                <select
+                <CustomSelect
                   id="serviceSelect"
                   value={selectedServiceId}
-                  onChange={(e) => setSelectedServiceId(Number(e.target.value))}
-                  className="w-full apple-input rounded-xl px-3.5 py-3 text-sm font-medium"
-                >
-                  {dentalServices.map((s) => (
-                    <option key={s.id} value={s.id}>
-                      {isBn
-                        ? `${toBanglaDigits(s.id)}. ${s.titleBn}`
-                        : currentLang === "en"
-                        ? `${s.id}. ${s.titleEn}`
-                        : `${s.id}. ${s.titleEn} (${s.titleBn})`}
-                    </option>
-                  ))}
-                </select>
+                  onChange={(val) => setSelectedServiceId(Number(val))}
+                  options={serviceOptions}
+                  leadingIcon="ph-first-aid-kit"
+                  placeholder={isBn ? "চিকিৎসা সেবা নির্বাচন করুন..." : "Select treatment..."}
+                  ariaLabel={t("formServiceLabel")}
+                />
               </div>
 
               <div className="sm:col-span-3 space-y-1.5">
@@ -329,18 +419,15 @@ Please confirm my appointment serial. Thank you!`;
                   <span>{t("formTimeLabel")}</span>
                   <span className="text-rose-500 ml-1">*</span>
                 </label>
-                <select
+                <CustomSelect
                   id="bookingTimeSlot"
                   value={bookingTimeSlot}
-                  onChange={(e) => setBookingTimeSlot(e.target.value)}
-                  className="w-full apple-input rounded-xl px-3 py-3 text-sm font-medium"
-                >
-                  {slots.map((slot, idx) => (
-                    <option key={idx} value={slot}>
-                      {slot}
-                    </option>
-                  ))}
-                </select>
+                  onChange={(val) => setBookingTimeSlot(String(val))}
+                  options={timeSlotOptions}
+                  leadingIcon="ph-clock"
+                  placeholder={isBn ? "সময় নির্বাচন করুন..." : "Select time slot..."}
+                  ariaLabel={t("formTimeLabel")}
+                />
               </div>
             </div>
 
@@ -381,10 +468,20 @@ Please confirm my appointment serial. Thank you!`;
             <div className="flex flex-wrap items-center gap-3 pt-2">
               <button
                 type="submit"
-                className="w-full sm:flex-1 sm:min-w-[200px] inline-flex items-center justify-center gap-2.5 bg-gradient-to-r from-emerald-500 via-emerald-600 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold py-4 px-6 rounded-2xl shadow-xl shadow-emerald-500/25 transition-all hover:-translate-y-0.5 text-sm sm:text-base"
+                disabled={isSubmitting}
+                className="w-full sm:flex-1 sm:min-w-[200px] inline-flex items-center justify-center gap-2.5 bg-gradient-to-r from-emerald-500 via-emerald-600 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold py-4 px-6 rounded-2xl shadow-xl shadow-emerald-500/25 transition-all hover:-translate-y-0.5 text-sm sm:text-base disabled:opacity-75"
               >
-                <i className="ph-fill ph-whatsapp-logo text-2xl" />
-                <span>{t("formSubmitWhatsapp")}</span>
+                {isSubmitting ? (
+                  <>
+                    <i className="ph-bold ph-spinner animate-spin text-2xl" />
+                    <span>{isBn ? "সিরিয়াল সেভ হচ্ছে..." : "Saving Serial..."}</span>
+                  </>
+                ) : (
+                  <>
+                    <i className="ph-fill ph-whatsapp-logo text-2xl" />
+                    <span>{t("formSubmitWhatsapp")}</span>
+                  </>
+                )}
               </button>
 
               <button
@@ -531,9 +628,9 @@ Please confirm my appointment serial. Thank you!`;
               <div className="pt-3 border-t border-dashed border-slate-300 dark:border-slate-700 flex items-center justify-between gap-2 text-xs">
                 <div>
                   <p className="font-bold text-slate-700 dark:text-slate-200">
-                    WhatsApp: 01733-054717
+                    WhatsApp: {whatsappNumber}
                   </p>
-                  <p className="text-[11px] text-slate-500">Serial Hotline: 01688-434676</p>
+                  <p className="text-[11px] text-slate-500">Serial Hotline: {hotline}</p>
                 </div>
                 <button
                   type="button"

@@ -2,18 +2,29 @@
 
 import React, { useState } from "react";
 import { useLanguage } from "@/context/LanguageContext";
+import { useClinic } from "@/context/ClinicContext";
 
 export const BranchesSection: React.FC = () => {
-  const { t, quickSelectBranch } = useLanguage();
-  const [simulatedTime, setSimulatedTime] = useState<"real" | 11 | 20>("real");
+  const { t, currentLang, quickSelectBranch } = useLanguage();
+  const {
+    nawhataName,
+    nawhataAddress,
+    nawhataHours,
+    nawhataMapUrl,
+    cityName,
+    cityAddress,
+    cityHours,
+    cityMapUrl,
+  } = useClinic();
 
-  // Determine branch status based on simulation or real time
+  // Real-time branch open/close status
   const now = new Date();
-  const hour = simulatedTime === "real" ? now.getHours() : simulatedTime;
-  const isFriday = simulatedTime === "real" ? now.getDay() === 5 : false;
+  const hour = now.getHours();
+  const isFriday = now.getDay() === 5;
+  const isBn = currentLang === "bn";
 
-  const nawhataOpen = !isFriday && hour >= 9 && hour < 18;
-  const cityOpen = hour >= 19 && hour < 23;
+  const nawhataOpen = !isFriday && hour >= 9 && hour < 21;
+  const cityOpen = !isFriday && hour >= 17 && hour < 22;
 
   return (
     <section id="branches" className="scroll-mt-24 space-y-8">
@@ -28,49 +39,6 @@ export const BranchesSection: React.FC = () => {
         <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base">
           {t("branchesSectionSub")}
         </p>
-      </div>
-
-      {/* Interactive Time Simulator Bar */}
-      <div className="max-w-xl mx-auto apple-glass-subtle rounded-2xl px-4 py-3 flex flex-wrap items-center justify-between gap-3 text-xs">
-        <div className="flex items-center gap-2 font-medium text-slate-700 dark:text-slate-200">
-          <i className="ph-fill ph-sliders text-sky-500 text-base" />
-          <span>{t("simLabel")}</span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <button
-            type="button"
-            onClick={() => setSimulatedTime("real")}
-            className={`px-2.5 py-1 rounded-lg font-semibold transition-all ${
-              simulatedTime === "real"
-                ? "bg-sky-500 text-white"
-                : "hover:bg-white/50 dark:hover:bg-white/10"
-            }`}
-          >
-            {t("simLiveBtn")}
-          </button>
-          <button
-            type="button"
-            onClick={() => setSimulatedTime(11)}
-            className={`px-2.5 py-1 rounded-lg font-semibold transition-all ${
-              simulatedTime === 11
-                ? "bg-sky-500 text-white"
-                : "hover:bg-white/50 dark:hover:bg-white/10"
-            }`}
-          >
-            {t("simMorningBtn")}
-          </button>
-          <button
-            type="button"
-            onClick={() => setSimulatedTime(20)}
-            className={`px-2.5 py-1 rounded-lg font-semibold transition-all ${
-              simulatedTime === 20
-                ? "bg-indigo-500 text-white"
-                : "hover:bg-white/50 dark:hover:bg-white/10"
-            }`}
-          >
-            {t("simNightBtn")}
-          </button>
-        </div>
       </div>
 
       {/* Two Large Apple Glass Branch Cards */}
@@ -89,13 +57,15 @@ export const BranchesSection: React.FC = () => {
                     nawhataOpen ? "bg-emerald-500 animate-ping" : "bg-sky-500"
                   }`}
                 />
-                {nawhataOpen ? "Open Now (9:00 AM – 6:00 PM)" : "9:00 AM – 6:00 PM"}
+                {nawhataOpen
+                  ? (isBn ? "এখন খোলা (সকাল ৯:০০ – রাত ৯:০০)" : "Open Now (9:00 AM – 9:00 PM)")
+                  : (isBn ? "সকাল ৯:০০ – রাত ৯:০০ (শুক্রবার বন্ধ)" : "9:00 AM – 9:00 PM (Friday Closed)")}
               </span>
             </div>
 
             <div>
               <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
-                {t("b1CardHeading")}
+                {nawhataName || t("b1CardHeading")}
               </h3>
               <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
                 {t("b1CardSub")}
@@ -113,12 +83,8 @@ export const BranchesSection: React.FC = () => {
                     {t("locationLabel")}
                   </p>
                   <p className="text-base font-bold text-slate-900 dark:text-white">
-                    {t("b1LocationMain")}
+                    {nawhataAddress}
                   </p>
-                  <p
-                    className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1"
-                    dangerouslySetInnerHTML={{ __html: t("b1LocationFull") }}
-                  />
                 </div>
               </div>
 
@@ -133,10 +99,7 @@ export const BranchesSection: React.FC = () => {
                     {t("visitingHoursLabel")}
                   </p>
                   <p className="text-base sm:text-lg font-extrabold text-sky-700 dark:text-sky-300">
-                    {t("b1VisitingHoursMain")}
-                  </p>
-                  <p className="text-xs text-rose-600 dark:text-rose-400 font-semibold mt-0.5">
-                    {t("b1FridayNote")}
+                    {nawhataHours}
                   </p>
                 </div>
               </div>
@@ -154,7 +117,7 @@ export const BranchesSection: React.FC = () => {
               <span>{t("b1BookCta")}</span>
             </button>
             <a
-              href="https://www.google.com/maps/search/?api=1&query=Nowhata+Bazar+Akbari+Mosque+Paba+Rajshahi"
+              href={nawhataMapUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="apple-glass-subtle hover:bg-white/70 dark:hover:bg-white/15 font-semibold py-3.5 px-4 rounded-2xl inline-flex items-center justify-center gap-2 text-sm transition-all"
@@ -179,13 +142,15 @@ export const BranchesSection: React.FC = () => {
                     cityOpen ? "bg-emerald-400 animate-ping" : "bg-indigo-500"
                   }`}
                 />
-                {cityOpen ? "Open Now (7:00 PM – 11:00 PM)" : "7:00 PM – 11:00 PM"}
+                {cityOpen
+                  ? (isBn ? "এখন খোলা (বিকাল ৫:০০ – রাত ১০:০০)" : "Open Now (5:00 PM – 10:00 PM)")
+                  : (isBn ? "বিকাল ৫:০০ – রাত ১০:০০ (শুক্রবার বন্ধ)" : "5:00 PM – 10:00 PM (Friday Closed)")}
               </span>
             </div>
 
             <div>
               <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
-                {t("b2CardHeading")}
+                {cityName || t("b2CardHeading")}
               </h3>
               <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
                 {t("b2CardSub")}
@@ -203,12 +168,8 @@ export const BranchesSection: React.FC = () => {
                     {t("locationLabel")}
                   </p>
                   <p className="text-base font-bold text-slate-900 dark:text-white">
-                    {t("b2LocationMain")}
+                    {cityAddress}
                   </p>
-                  <p
-                    className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1"
-                    dangerouslySetInnerHTML={{ __html: t("b2LocationFull") }}
-                  />
                 </div>
               </div>
 
@@ -223,10 +184,7 @@ export const BranchesSection: React.FC = () => {
                     {t("visitingHoursLabel")}
                   </p>
                   <p className="text-base sm:text-lg font-extrabold text-indigo-700 dark:text-indigo-300">
-                    {t("b2VisitingHoursMain")}
-                  </p>
-                  <p className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold mt-0.5">
-                    {t("b2EveningNote")}
+                    {cityHours}
                   </p>
                 </div>
               </div>
@@ -244,7 +202,7 @@ export const BranchesSection: React.FC = () => {
               <span>{t("b2BookCta")}</span>
             </button>
             <a
-              href="https://www.google.com/maps/search/?api=1&query=Jinnahnagar+Sopura+Rajshahi"
+              href={cityMapUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="apple-glass-subtle hover:bg-white/70 dark:hover:bg-white/15 font-semibold py-3.5 px-4 rounded-2xl inline-flex items-center justify-center gap-2 text-sm transition-all"
