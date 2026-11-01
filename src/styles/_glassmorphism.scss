@@ -125,6 +125,26 @@ html.dark .apple-input {
   }
 }
 
+.custom-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.4) transparent;
+
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.35);
+    border-radius: 9999px;
+
+    &:hover {
+      background: rgba(56, 189, 248, 0.6);
+    }
+  }
+}
+
 // Ambient Mesh Background Orbs
 .ambient-canvas {
   position: fixed;
