@@ -1,0 +1,57 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Appointment {
+  id              String   @id @default(uuid())
+  serialId        String   @unique
+  patientName     String
+  patientPhone    String
+  patientAge      String?
+  branchKey       String   @default("nawhata") // "nawhata" | "city"
+  serviceId       Int?
+  serviceTitle    String
+  appointmentDate String   // "YYYY-MM-DD"
+  timeSlot        String
+  patientNotes    String?
+  doctorNotes     String?
+  status          String   @default("PENDING") // PENDING, CONFIRMED, COMPLETED, CANCELLED
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([appointmentDate])
+  @@index([patientPhone])
+  @@index([status])
+}
+
+model ClinicSetting {
+  id        String   @id @default(uuid())
+  key       String   @unique // e.g. "MAIN_CONFIG"
+  value     String   @db.Text // JSON string storing branches, locations, hotlines, live notice
+  updatedAt DateTime @updatedAt
+}
+
+model DentalService {
+  id          Int      @id
+  titleEn     String
+  titleBn     String
+  category    String   // diagnostic, restorative, cosmetic, ortho-surgical
+  shortDescEn String   @db.Text
+  shortDescBn String   @db.Text
+  durationEn  String
+  durationBn  String
+  techEn      String
+  techBn      String
+  careTipEn   String   @db.Text
+  careTipBn   String   @db.Text
+  icon        String   @default("ph-tooth")
+  color       String   @default("sky")
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  updatedAt   DateTime @updatedAt
+}
+
