@@ -90,10 +90,10 @@ export const LiveStatusStrip: React.FC = () => {
   }, [currentLang, noticeActive, noticeText, nawhataHours, cityHours]);
 
   return (
-    <div className="w-full apple-glass-strong border-b border-white/30 dark:border-white/10 text-xs sm:text-sm py-3 px-4 relative z-30">
-      <Container className="flex flex-wrap items-center justify-between gap-3">
+    <div className="w-full apple-glass-strong border-b border-white/30 dark:border-white/10 text-xs sm:text-sm py-2.5 px-4 relative z-30">
+      <Container className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-center">
         {/* Live Status Indicator or Emergency Notice */}
-        <div className="flex items-center gap-2.5">
+        <div className="flex flex-wrap items-center justify-center gap-2.5 text-center">
           {noticeActive ? (
             <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-600 dark:text-amber-400 font-bold border border-amber-500/30 shrink-0">
               <i className="ph-fill ph-megaphone text-xs" />
@@ -117,26 +117,26 @@ export const LiveStatusStrip: React.FC = () => {
             {statusMessage}
           </span>
 
-          <span className="hidden sm:inline-flex items-center gap-1 text-xs font-bold px-2.5 py-0.5 rounded-full bg-sky-500/10 text-sky-700 dark:text-sky-300 border border-sky-500/20 shrink-0">
+          <span className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-0.5 rounded-full bg-sky-500/10 text-sky-700 dark:text-sky-300 border border-sky-500/20 shrink-0">
             <i className="ph-fill ph-clock" />
             <span id="liveClockDisplay">{currentTimeStr}</span>
           </span>
         </div>
 
-        {/* Direct WhatsApp Serial */}
-        <div className="flex items-center gap-3 sm:gap-5 ml-auto">
+        {/* Direct WhatsApp Serial & X-Ray badge */}
+        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-center">
           <span
             id="topXrayBadge"
-            className="hidden lg:inline-flex items-center gap-1.5 text-rose-600 dark:text-rose-400 font-semibold bg-rose-500/10 px-2.5 py-0.5 rounded-full border border-rose-500/20"
+            className="inline-flex items-center gap-1.5 text-rose-600 dark:text-rose-400 font-semibold bg-rose-500/10 px-2.5 py-0.5 rounded-full border border-rose-500/20 text-xs"
           >
-            <i className="ph-fill ph-sparkle" />
+            <i className="ph-fill ph-sparkle text-xs" />
             <span>{t("topXrayHighlight")}</span>
           </span>
           <a
             href={whatsappLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 font-bold text-sky-700 dark:text-sky-300 hover:underline shrink-0"
+            className="inline-flex items-center gap-1.5 font-bold text-sky-700 dark:text-sky-300 hover:text-sky-600 dark:hover:text-sky-200 transition-colors shrink-0 text-xs sm:text-sm"
           >
             <i className="ph-fill ph-whatsapp-logo text-base text-emerald-500" />
             <span>WhatsApp / Serial: {whatsappNumber}</span>
