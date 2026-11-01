@@ -10,6 +10,10 @@ export const Footer: React.FC = () => {
   const {
     whatsappNumber,
     whatsappLink,
+    facebookUrl,
+    facebookUsername,
+    youtubeUrl,
+    youtubeUsername,
     nawhataName,
     nawhataAddress,
     nawhataHours,
@@ -42,6 +46,7 @@ export const Footer: React.FC = () => {
           <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
             {t("footerDesc")}
           </p>
+
           <div className="flex flex-wrap items-center gap-2 pt-1">
             <a
               href={whatsappLink}
@@ -52,6 +57,46 @@ export const Footer: React.FC = () => {
               <i className="ph-fill ph-whatsapp-logo text-base" /> {whatsappNumber}
             </a>
           </div>
+
+          {/* Social Media Links (Facebook & YouTube) */}
+          {(facebookUrl || youtubeUrl) && (
+            <div className="pt-2 space-y-2">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block">
+                {t("footerSocialHeading")}
+              </span>
+              <div className="flex flex-wrap items-center gap-2">
+                {facebookUrl && (
+                  <a
+                    href={facebookUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={t("footerFacebookTitle")}
+                    className="px-3 py-1.5 rounded-xl bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/20 text-xs font-bold inline-flex items-center gap-1.5 hover:bg-blue-600 hover:text-white transition-all shadow-sm group"
+                    title={`Facebook: ${facebookUsername || facebookUrl}`}
+                  >
+                    <i className="ph-fill ph-facebook-logo text-base text-blue-500 group-hover:text-white transition-colors" />
+                    <span>{facebookUsername || "Facebook"}</span>
+                    <i className="ph-bold ph-arrow-up-right text-[10px] opacity-60 group-hover:opacity-100" />
+                  </a>
+                )}
+
+                {youtubeUrl && (
+                  <a
+                    href={youtubeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={t("footerYoutubeTitle")}
+                    className="px-3 py-1.5 rounded-xl bg-red-500/15 text-red-600 dark:text-red-400 border border-red-500/20 text-xs font-bold inline-flex items-center gap-1.5 hover:bg-red-600 hover:text-white transition-all shadow-sm group"
+                    title={`YouTube: ${youtubeUsername || youtubeUrl}`}
+                  >
+                    <i className="ph-fill ph-youtube-logo text-base text-red-500 group-hover:text-white transition-colors" />
+                    <span>{youtubeUsername || "YouTube"}</span>
+                    <i className="ph-bold ph-arrow-up-right text-[10px] opacity-60 group-hover:opacity-100" />
+                  </a>
+                )}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Nowhata Branch (4 Cols) */}
@@ -84,7 +129,7 @@ export const Footer: React.FC = () => {
       </Container>
 
       <Container className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <p>{t("footerCopyright")}</p>
           <span className="text-slate-300 dark:text-slate-700">•</span>
           <a
@@ -95,6 +140,37 @@ export const Footer: React.FC = () => {
             <i className="ph-bold ph-lock-key text-xs" />
             <span>অ্যাডমিন</span>
           </a>
+          {(facebookUrl || youtubeUrl) && (
+            <>
+              <span className="text-slate-300 dark:text-slate-700">•</span>
+              <div className="flex items-center gap-2">
+                {facebookUrl && (
+                  <a
+                    href={facebookUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-7 h-7 rounded-lg bg-slate-200/70 dark:bg-slate-800 text-blue-500 hover:bg-blue-600 hover:text-white flex items-center justify-center transition-colors text-sm"
+                    title={`Facebook: ${facebookUsername || facebookUrl}`}
+                    aria-label="Facebook"
+                  >
+                    <i className="ph-fill ph-facebook-logo" />
+                  </a>
+                )}
+                {youtubeUrl && (
+                  <a
+                    href={youtubeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-7 h-7 rounded-lg bg-slate-200/70 dark:bg-slate-800 text-red-500 hover:bg-red-600 hover:text-white flex items-center justify-center transition-colors text-sm"
+                    title={`YouTube: ${youtubeUsername || youtubeUrl}`}
+                    aria-label="YouTube"
+                  >
+                    <i className="ph-fill ph-youtube-logo" />
+                  </a>
+                )}
+              </div>
+            </>
+          )}
         </div>
         <div className="flex items-center gap-2 text-xs">
           <span className="text-slate-500 dark:text-slate-400">

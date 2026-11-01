@@ -28,12 +28,24 @@ export interface ClinicSettings {
   noticeActive: boolean;
   noticeTextEn: string;
   noticeTextBn: string;
+
+  // Social Media Links & Handles
+  facebookUrl?: string;
+  facebookUsername?: string;
+  youtubeUrl?: string;
+  youtubeUsername?: string;
 }
 
 export const defaultClinicSettings: ClinicSettings = {
   primaryHotline: "01733-054717",
   whatsappNumber: "01733-054717",
   emergencyPhone: "01733-054717",
+
+  // Default Social Media
+  facebookUrl: "https://facebook.com/sakibdentalcare",
+  facebookUsername: "sakibdentalcare",
+  youtubeUrl: "https://youtube.com/@sakibdentalcare",
+  youtubeUsername: "@sakibdentalcare",
 
   nawhataNameEn: "Nowhata Branch (Nowhata Bazar)",
   nawhataNameBn: "নওহাটা শাখা (নওহাটা বাজার)",
@@ -85,6 +97,12 @@ interface ClinicContextType {
   // Notice
   noticeActive: boolean;
   noticeText: string;
+
+  // Social Media
+  facebookUrl: string;
+  facebookUsername: string;
+  youtubeUrl: string;
+  youtubeUsername: string;
 }
 
 const ClinicContext = createContext<ClinicContextType | null>(null);
@@ -227,6 +245,12 @@ export const ClinicProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     noticeActive: Boolean(settings.noticeActive),
     noticeText,
+
+    // Social Media
+    facebookUrl: settings.facebookUrl || defaultClinicSettings.facebookUrl || "",
+    facebookUsername: settings.facebookUsername || defaultClinicSettings.facebookUsername || "",
+    youtubeUrl: settings.youtubeUrl || defaultClinicSettings.youtubeUrl || "",
+    youtubeUsername: settings.youtubeUsername || defaultClinicSettings.youtubeUsername || "",
   };
 
   return <ClinicContext.Provider value={value}>{children}</ClinicContext.Provider>;

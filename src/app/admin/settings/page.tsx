@@ -13,6 +13,10 @@ export default function AdminSettingsPage() {
   const [form, setForm] = useState({
     primaryHotline: "01733-054717",
     whatsappNumber: "01733-054717",
+    facebookUrl: "https://facebook.com/sakibdentalcare",
+    facebookUsername: "sakibdentalcare",
+    youtubeUrl: "https://youtube.com/@sakibdentalcare",
+    youtubeUsername: "@sakibdentalcare",
   });
 
   useEffect(() => {
@@ -25,6 +29,10 @@ export default function AdminSettingsPage() {
           setForm({
             primaryHotline: json.data.primaryHotline || "01733-054717",
             whatsappNumber: json.data.whatsappNumber || "01733-054717",
+            facebookUrl: json.data.facebookUrl ?? "https://facebook.com/sakibdentalcare",
+            facebookUsername: json.data.facebookUsername ?? "sakibdentalcare",
+            youtubeUrl: json.data.youtubeUrl ?? "https://youtube.com/@sakibdentalcare",
+            youtubeUsername: json.data.youtubeUsername ?? "@sakibdentalcare",
           });
         }
       } catch (err) {
@@ -50,6 +58,10 @@ export default function AdminSettingsPage() {
         ...baseConfig,
         primaryHotline: form.primaryHotline,
         whatsappNumber: form.whatsappNumber,
+        facebookUrl: form.facebookUrl,
+        facebookUsername: form.facebookUsername,
+        youtubeUrl: form.youtubeUrl,
+        youtubeUsername: form.youtubeUsername,
       };
 
       const res = await fetch("/api/admin/settings", {
@@ -185,6 +197,136 @@ export default function AdminSettingsPage() {
                   <i className="ph-bold ph-phone" />
                   <span>{L("Test Call Dialing", "কল টেস্ট করুন")}</span>
                 </a>
+              </div>
+            </div>
+
+            {/* Social Media Accounts (Facebook & YouTube) */}
+            <div className="pt-4 border-t border-slate-800 space-y-4">
+              <div>
+                <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">
+                  {L("Social Media Channels", "সোশ্যাল মিডিয়া প্রোফাইল লিংক")}
+                </span>
+                <h3 className="text-base font-bold text-white">
+                  {L("Facebook & YouTube Links", "ফেসবুক ও ইউটিউব চ্যানেল লিংক")}
+                </h3>
+                <p className="text-xs text-slate-400">
+                  {L(
+                    "Links entered here appear in the website footer for patients to visit your social media profiles.",
+                    "এখানে দেওয়া সোশ্যাল মিডিয়া লিংক ও ইউজারনেমগুলো ওয়েবসাইটের ফুটারে রোগীদের জন্য দৃশ্যমান হবে।"
+                  )}
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Facebook Configuration */}
+                <div className="p-5 rounded-2xl bg-[#090f1d] border border-slate-700/80 space-y-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 border border-blue-500/30 flex items-center justify-center text-xl">
+                      <i className="ph-fill ph-facebook-logo" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-white">
+                        {L("Facebook Page / Profile", "ফেসবুক পেজ / প্রোফাইল")}
+                      </h4>
+                      <p className="text-xs text-slate-400">
+                        {L("Direct link to your Facebook page", "আপনার ফেসবুক পেজের লিংক")}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1.5 pt-1">
+                    <label className="text-xs font-semibold text-slate-300">
+                      {L("Facebook Full URL", "ফেসবুক ফুল ইউআরএল (URL)")}
+                    </label>
+                    <input
+                      type="url"
+                      value={form.facebookUrl}
+                      onChange={(e) => setForm((prev) => ({ ...prev, facebookUrl: e.target.value }))}
+                      placeholder="https://facebook.com/sakibdentalcare"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#0c1322] border border-slate-700 text-white font-mono text-sm focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-semibold text-slate-300">
+                      {L("Facebook Username / Display Name", "ফেসবুক ইউজারনেম / ডিসপ্লে নাম")}
+                    </label>
+                    <input
+                      type="text"
+                      value={form.facebookUsername}
+                      onChange={(e) => setForm((prev) => ({ ...prev, facebookUsername: e.target.value }))}
+                      placeholder="sakibdentalcare"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#0c1322] border border-slate-700 text-white text-sm focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+
+                  {form.facebookUrl && (
+                    <a
+                      href={form.facebookUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-xs text-blue-400 hover:text-blue-300 font-semibold pt-1"
+                    >
+                      <i className="ph-bold ph-arrow-square-out" />
+                      <span>{L("Visit Facebook Page", "ফেসবুক পেজ টেস্ট করুন")}</span>
+                    </a>
+                  )}
+                </div>
+
+                {/* YouTube Configuration */}
+                <div className="p-5 rounded-2xl bg-[#090f1d] border border-slate-700/80 space-y-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-red-500/20 text-red-400 border border-red-500/30 flex items-center justify-center text-xl">
+                      <i className="ph-fill ph-youtube-logo" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-white">
+                        {L("YouTube Channel", "ইউটিউব চ্যানেল")}
+                      </h4>
+                      <p className="text-xs text-slate-400">
+                        {L("Direct link to your YouTube video channel", "আপনার ইউটিউব চ্যানেলের লিংক")}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1.5 pt-1">
+                    <label className="text-xs font-semibold text-slate-300">
+                      {L("YouTube Full URL", "ইউটিউব ফুল ইউআরএল (URL)")}
+                    </label>
+                    <input
+                      type="url"
+                      value={form.youtubeUrl}
+                      onChange={(e) => setForm((prev) => ({ ...prev, youtubeUrl: e.target.value }))}
+                      placeholder="https://youtube.com/@sakibdentalcare"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#0c1322] border border-slate-700 text-white font-mono text-sm focus:outline-none focus:border-red-500"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-semibold text-slate-300">
+                      {L("YouTube Channel Handle / Name", "ইউটিউব হ্যান্ডেল / নাম")}
+                    </label>
+                    <input
+                      type="text"
+                      value={form.youtubeUsername}
+                      onChange={(e) => setForm((prev) => ({ ...prev, youtubeUsername: e.target.value }))}
+                      placeholder="@sakibdentalcare"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#0c1322] border border-slate-700 text-white text-sm focus:outline-none focus:border-red-500"
+                    />
+                  </div>
+
+                  {form.youtubeUrl && (
+                    <a
+                      href={form.youtubeUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-xs text-red-400 hover:text-red-300 font-semibold pt-1"
+                    >
+                      <i className="ph-bold ph-arrow-square-out" />
+                      <span>{L("Visit YouTube Channel", "ইউটিউব চ্যানেল টেস্ট করুন")}</span>
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
 

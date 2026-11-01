@@ -12,6 +12,10 @@ async function main() {
     noticeTextBn: "সাকিব ডেন্টাল কেয়ারে স্বাগতম। নওহাটা বাজার ও রাজশাহী শহর শাখায় নিয়মিত সেবা প্রদান করা হচ্ছে।",
     primaryHotline: "01733-054717",
     whatsappNumber: "01733-054717",
+    facebookUrl: "https://facebook.com/sakibdentalcare",
+    facebookUsername: "sakibdentalcare",
+    youtubeUrl: "https://youtube.com/@sakibdentalcare",
+    youtubeUsername: "@sakibdentalcare",
     
     // Nowhata Branch Location & Schedule
     nawhataNameEn: "Nowhata Branch (Nowhata Bazar)",
