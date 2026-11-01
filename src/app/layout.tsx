@@ -7,6 +7,7 @@ import "@/styles/globals.scss";
 import { ToastProvider } from "@/context/ToastContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { LanguageProvider } from "@/context/LanguageContext";
+import { ClinicProvider } from "@/context/ClinicContext";
 import { AmbientBackground } from "@/components/common/AmbientBackground";
 import { ToastNotification } from "@/components/common/ToastNotification";
 import { FloatingWhatsApp } from "@/components/common/FloatingWhatsApp";
@@ -57,15 +58,17 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="antialiased selection:bg-sky-500 selection:text-white pb-8 sm:pb-12">
+      <body className="antialiased selection:bg-sky-500 selection:text-white">
         <ToastProvider>
           <ThemeProvider>
             <LanguageProvider>
-              <AmbientBackground />
-              {children}
-              <FloatingWhatsApp />
-              <ToastNotification />
-              <ServiceModal />
+              <ClinicProvider>
+                <AmbientBackground />
+                {children}
+                <FloatingWhatsApp />
+                <ToastNotification />
+                <ServiceModal />
+              </ClinicProvider>
             </LanguageProvider>
           </ThemeProvider>
         </ToastProvider>

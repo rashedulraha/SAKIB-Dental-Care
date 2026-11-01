@@ -16,7 +16,7 @@ import { Footer } from "@/components/footer/Footer";
 
 export default function Home() {
   return (
-    <>
+    <div className="pt-[68px] sm:pt-[78px] pb-8 sm:pb-12">
       <Header />
       <Hero />
       <LiveStatusStrip />
@@ -30,6 +30,6 @@ export default function Home() {
         <FaqSection />
       </Container>
       <Footer />
-    </>
+    </div>
   );
 }

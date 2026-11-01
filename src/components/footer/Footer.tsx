@@ -2,10 +2,21 @@
 
 import React from "react";
 import { useLanguage } from "@/context/LanguageContext";
+import { useClinic } from "@/context/ClinicContext";
 import { Container } from "@/components/common/Container";
 
 export const Footer: React.FC = () => {
   const { t, currentLang } = useLanguage();
+  const {
+    whatsappNumber,
+    whatsappLink,
+    nawhataName,
+    nawhataAddress,
+    nawhataHours,
+    cityName,
+    cityAddress,
+    cityHours,
+  } = useClinic();
 
   return (
     <footer
@@ -33,18 +44,12 @@ export const Footer: React.FC = () => {
           </p>
           <div className="flex flex-wrap items-center gap-2 pt-1">
             <a
-              href="https://wa.me/8801733054717"
+              href={whatsappLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-3.5 py-2 rounded-xl bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 text-xs font-bold inline-flex items-center gap-1.5 hover:bg-emerald-500 hover:text-white transition-all"
+              className="px-3.5 py-2 rounded-xl bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 text-xs font-bold inline-flex items-center gap-1.5 hover:bg-emerald-500 hover:text-white transition-all shadow-sm"
             >
-              <i className="ph-fill ph-whatsapp-logo text-base" /> 01733-054717
-            </a>
-            <a
-              href="tel:+8801688434676"
-              className="px-3.5 py-2 rounded-xl bg-sky-500/15 text-sky-700 dark:text-sky-300 text-xs font-bold inline-flex items-center gap-1.5 hover:bg-sky-500 hover:text-white transition-all"
-            >
-              <i className="ph-fill ph-phone-call text-base" /> 01688-434676
+              <i className="ph-fill ph-whatsapp-logo text-base" /> {whatsappNumber}
             </a>
           </div>
         </div>
@@ -52,38 +57,45 @@ export const Footer: React.FC = () => {
         {/* Nowhata Branch (4 Cols) */}
         <div className="md:col-span-4 space-y-2">
           <h4 className="text-sm font-extrabold uppercase tracking-wider text-sky-600 dark:text-sky-400">
-            {t("footerB1Title")}
+            {nawhataName || t("footerB1Title")}
           </h4>
-          <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-200 font-semibold">
-            {t("footerB1AddrShort")}
+          <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-200 leading-relaxed font-medium">
+            {nawhataAddress}
           </p>
-          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-            {t("footerB1AddrFull")}
-          </p>
-          <p className="text-xs font-bold text-slate-700 dark:text-slate-300">
-            {t("footerB1Hours")}
+          <p className="text-xs font-bold text-sky-600 dark:text-sky-400 pt-1">
+            <i className="ph-fill ph-clock text-xs mr-1" />
+            {nawhataHours}
           </p>
         </div>
 
         {/* City Branch (4 Cols) */}
         <div className="md:col-span-4 space-y-2">
           <h4 className="text-sm font-extrabold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
-            {t("footerB2Title")}
+            {cityName || t("footerB2Title")}
           </h4>
-          <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-200 font-semibold">
-            {t("footerB2AddrShort")}
+          <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-200 leading-relaxed font-medium">
+            {cityAddress}
           </p>
-          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-            {t("footerB2AddrFull")}
-          </p>
-          <p className="text-xs font-bold text-slate-700 dark:text-slate-300">
-            {t("footerB2Hours")}
+          <p className="text-xs font-bold text-indigo-600 dark:text-indigo-400 pt-1">
+            <i className="ph-fill ph-clock text-xs mr-1" />
+            {cityHours}
           </p>
         </div>
       </Container>
 
       <Container className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
-        <p>{t("footerCopyright")}</p>
+        <div className="flex items-center gap-3">
+          <p>{t("footerCopyright")}</p>
+          <span className="text-slate-300 dark:text-slate-700">•</span>
+          <a
+            href="/admin"
+            className="hover:text-sky-500 transition-colors flex items-center gap-1 font-semibold"
+            title="Clinic Admin Dashboard"
+          >
+            <i className="ph-bold ph-lock-key text-xs" />
+            <span>অ্যাডমিন</span>
+          </a>
+        </div>
         <div className="flex items-center gap-2 text-xs">
           <span className="text-slate-500 dark:text-slate-400">
             {currentLang === "bn" ? "ডিজাইন ও ডেভেলপমেন্টে:" : "Designed & Developed by"}
