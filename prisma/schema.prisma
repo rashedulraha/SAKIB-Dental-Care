@@ -30,8 +30,8 @@ model Appointment {
 
 model ClinicSetting {
   id        String   @id @default(uuid())
-  key       String   @unique // e.g. "MAIN_CONFIG"
-  value     String   @db.Text // JSON string storing branches, locations, hotlines, live notice
+  key       String   @unique 
+  value     String   @db.Text 
   updatedAt DateTime @updatedAt
 }
 
