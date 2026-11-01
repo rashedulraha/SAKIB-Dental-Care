@@ -2,9 +2,13 @@
 
 import React from "react";
 import { useLanguage } from "@/context/LanguageContext";
+import { useClinic } from "@/context/ClinicContext";
 
 export const SpecialistHighlight: React.FC = () => {
-  const { t, quickSelectBranch } = useLanguage();
+  const { t, currentLang, quickSelectBranch } = useLanguage();
+  const { nawhataHours, cityHours } = useClinic();
+
+  const isBn = currentLang === "bn";
 
   return (
     <section className="relative">
@@ -61,7 +65,7 @@ export const SpecialistHighlight: React.FC = () => {
                   id="badgeNawhata"
                   className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30"
                 >
-                  9:00 AM - 6:00 PM
+                  {isBn ? "সকাল ৯:০০ – রাত ৯:০০" : "9:00 AM – 9:00 PM"}
                 </span>
               </div>
               <h3 className="text-lg font-extrabold text-slate-900 dark:text-white">
@@ -74,7 +78,7 @@ export const SpecialistHighlight: React.FC = () => {
             </div>
             <div className="flex items-center justify-between text-xs pt-2 border-t border-slate-200/50 dark:border-white/10">
               <span className="font-semibold text-sky-700 dark:text-sky-300">
-                {t("b1HoursHero")}
+                {nawhataHours || t("b1HoursHero")}
               </span>
               <button
                 type="button"
@@ -102,7 +106,7 @@ export const SpecialistHighlight: React.FC = () => {
                   id="badgeCity"
                   className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 border border-indigo-500/30"
                 >
-                  7:00 PM - 11:00 PM
+                  {isBn ? "বিকাল ৫:০০ – রাত ১০:০০" : "5:00 PM – 10:00 PM"}
                 </span>
               </div>
               <h3 className="text-lg font-extrabold text-slate-900 dark:text-white">
@@ -115,7 +119,7 @@ export const SpecialistHighlight: React.FC = () => {
             </div>
             <div className="flex items-center justify-between text-xs pt-2 border-t border-slate-200/50 dark:border-white/10">
               <span className="font-semibold text-indigo-700 dark:text-indigo-300">
-                {t("b2HoursHero")}
+                {cityHours || t("b2HoursHero")}
               </span>
               <button
                 type="button"

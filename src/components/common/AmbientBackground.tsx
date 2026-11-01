@@ -1,8 +1,16 @@
 "use client";
 
 import React from "react";
+import { usePathname } from "next/navigation";
 
 export const AmbientBackground: React.FC = () => {
+  const pathname = usePathname();
+
+  // Disable ambient orbs on admin portal for a pristine obsidian dark workspace
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
+
   return (
     <div className="ambient-canvas" aria-hidden="true">
       <div className="orb w-[420px] h-[420px] bg-sky-400/60 top-[-8%] left-[-6%] animate-float-slow" />

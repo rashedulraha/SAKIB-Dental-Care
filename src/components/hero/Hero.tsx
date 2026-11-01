@@ -2,10 +2,12 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useLanguage } from "@/context/LanguageContext";
+import { useClinic } from "@/context/ClinicContext";
 import { heroSlides } from "@/data/heroSlides";
 
 export const Hero: React.FC = () => {
   const { currentLang, t, quickSelectBranch } = useLanguage();
+  const { nawhataHours, cityHours, nawhataName, cityName } = useClinic();
   const [currentSlideIndex, setCurrentSlideIndex] = useState<number>(0);
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [isMuted, setIsMuted] = useState<boolean>(true);
@@ -222,11 +224,9 @@ export const Hero: React.FC = () => {
             className="px-3 sm:px-3.5 py-1.5 rounded-full bg-black/45 hover:bg-sky-500/30 border border-white/15 backdrop-blur-md flex items-center gap-1.5 sm:gap-2 transition-all text-left"
           >
             <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
-            <span
-              dangerouslySetInnerHTML={{
-                __html: t("heroPillNawhata"),
-              }}
-            />
+            <span>
+              <strong className="font-bold">{nawhataName}:</strong> {nawhataHours}
+            </span>
           </button>
           <button
             type="button"
@@ -234,11 +234,9 @@ export const Hero: React.FC = () => {
             className="px-3 sm:px-3.5 py-1.5 rounded-full bg-black/45 hover:bg-indigo-500/30 border border-white/15 backdrop-blur-md flex items-center gap-1.5 sm:gap-2 transition-all text-left"
           >
             <span className="w-2 h-2 rounded-full bg-indigo-400 shrink-0" />
-            <span
-              dangerouslySetInnerHTML={{
-                __html: t("heroPillCity"),
-              }}
-            />
+            <span>
+              <strong className="font-bold">{cityName}:</strong> {cityHours}
+            </span>
           </button>
         </div>
       </div>
