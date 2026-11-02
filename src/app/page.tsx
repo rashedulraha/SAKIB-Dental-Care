@@ -13,6 +13,7 @@ import { XrayTechSection } from "@/components/sections/XrayTechSection";
 import { BookingSection } from "@/components/sections/BookingSection";
 import { FaqSection } from "@/components/sections/FaqSection";
 import { Footer } from "@/components/footer/Footer";
+import { HiddenAdminAccess } from "@/components/admin/HiddenAdminAccess";
 
 export default function Home() {
   return (
@@ -30,6 +31,7 @@ export default function Home() {
         <FaqSection />
       </Container>
       <Footer />
+      <HiddenAdminAccess />
     </div>
   );
 }
