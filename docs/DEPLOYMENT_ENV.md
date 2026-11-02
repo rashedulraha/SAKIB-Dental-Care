@@ -38,6 +38,19 @@ JWT_SECRET="generate_a_secure_64_character_random_hex_string_for_production_jwt"
 JWT_EXPIRES_IN="7d"
 
 # -----------------------------------------------------------------------------
+# HIDDEN ADMIN SIGN-IN AND EMAIL OTP
+# -----------------------------------------------------------------------------
+ADMIN_EMAIL="admin@sakibdental.com"
+ADMIN_PASSWORD="replace_with_a_unique_long_admin_password"
+SMTP_HOST="smtp.example.com"
+SMTP_PORT="587"
+SMTP_SECURE="false"                           # Use "true" for implicit TLS, commonly port 465
+SMTP_USER="admin@sakibdental.com"
+SMTP_PASSWORD="your_smtp_or_provider_app_password"
+SMTP_FROM_EMAIL="admin@sakibdental.com"       # Use a sender authorized by your SMTP provider
+SMTP_FROM_NAME="Sakib Dental Care"
+
+# -----------------------------------------------------------------------------
 # CLINIC DEFAULT CONTACTS & EXTERNAL BRIDGES
 # -----------------------------------------------------------------------------
 NEXT_PUBLIC_WHATSAPP_NUMBER="8801733054717"
@@ -83,6 +96,13 @@ npx prisma migrate dev --name init_sakib_dental_schema
 npx prisma migrate deploy
 ```
 
+The admin OTP challenge table is included in the Prisma migrations. Apply pending
+migrations before deploying the updated sign-in flow.
+
+For reliable inbox delivery, configure SPF and DKIM for the sending domain and
+publish an aligned DMARC policy. SMTP settings and sender reputation influence
+spam filtering; no application can guarantee primary-inbox placement.
+
 ### Step 4: Seed Initial Content & Admin User
 The database seed script (`prisma/seed.ts`) automatically transfers existing static data (`heroSlides`, `dentalServices`, `branchDetails`, `symptomData`, and `uiTranslations`) into PostgreSQL and generates the default administrator:
 ```bash
@@ -101,4 +121,3 @@ npx prisma db seed
    ```
 5. **Database Connection Pooling:** Ensure `DATABASE_URL` uses PgBouncer or connection pooler mode to avoid exhausting PostgreSQL client connections across serverless functions.
 6. **SSL & Domain:** Pin custom domain (e.g., `sakibdental.com`) with automated Let's Encrypt SSL certificates.
-
