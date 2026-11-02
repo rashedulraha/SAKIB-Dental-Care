@@ -1,10 +1,7 @@
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import type { NextRequest } from "next/server";
-
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "sdc_default_secret_key_change_in_production_2026"
-);
+import { getJwtSecret } from "@/lib/auth/secret";
 
 export const COOKIE_NAME = "sdc_admin_session";
 
@@ -21,7 +18,7 @@ export async function signAdminToken(): Promise<string> {
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime("7d")
-    .sign(JWT_SECRET);
+    .sign(getJwtSecret());
 }
 
 /**
@@ -29,7 +26,7 @@ export async function signAdminToken(): Promise<string> {
  */
 export async function verifyAdminToken(token: string): Promise<boolean> {
   try {
-    const { payload } = await jwtVerify(token, JWT_SECRET);
+    const { payload } = await jwtVerify(token, getJwtSecret());
     return payload.role === "admin";
   } catch {
     return false;
@@ -53,16 +50,5 @@ export async function verifyRequestSession(req: NextRequest): Promise<boolean> {
   const token = req.cookies.get(COOKIE_NAME)?.value;
   if (!token) return false;
   return await verifyAdminToken(token);
-}
-
-/**
- * Checks if entered password matches ADMIN_PASSWORD
- */
-export function verifyAdminPassword(password: string): boolean {
-  const configuredPassword = process.env.ADMIN_PASSWORD?.trim() || "SakibDental@2026";
-  // Remove any surrounding quotes from .env if present
-  const cleanConfigured = configuredPassword.replace(/^["']|["']$/g, "").trim();
-  const cleanInput = (password || "").trim();
-  return cleanInput.length > 0 && cleanInput === cleanConfigured;
 }
 
