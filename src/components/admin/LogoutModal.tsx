@@ -4,7 +4,14 @@ import React, { useEffect } from "react";
 import { useAdmin } from "@/context/AdminContext";
 
 export const LogoutModal: React.FC = () => {
-  const { isLogoutModalOpen, isLoggingOut, closeLogoutModal, confirmLogout, L } = useAdmin();
+  const {
+    isLogoutModalOpen,
+    isLoggingOut,
+    logoutError,
+    closeLogoutModal,
+    confirmLogout,
+    L,
+  } = useAdmin();
 
   // Close on Escape key
   useEffect(() => {
@@ -51,11 +58,20 @@ export const LogoutModal: React.FC = () => {
           </h3>
           <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-medium">
             {L(
-              "Are you sure you want to end your session? You will be strictly required to enter your admin password again to access the portal.",
-              "আপনি কি নিশ্চিতভাবে আপনার সেশন সমাপ্ত করতে চান? ড্যাশবোর্ডে পুনরায় প্রবেশ করতে পাসওয়ার্ড প্রদান করতে হবে।"
+              "Are you sure you want to end your session? You will need to enter your admin email and password to access the dashboard again.",
+              "আপনি কি নিশ্চিতভাবে আপনার সেশন সমাপ্ত করতে চান? ড্যাশবোর্ডে পুনরায় প্রবেশ করতে অ্যাডমিন ইমেইল ও পাসওয়ার্ড দিতে হবে।"
             )}
           </p>
         </div>
+
+        {logoutError && (
+          <p
+            role="alert"
+            className="mt-4 rounded-xl border border-rose-500/30 bg-rose-500/15 p-3 text-xs text-rose-300"
+          >
+            {logoutError}
+          </p>
+        )}
 
         {/* Security Notice Pill */}
         <div className="mt-5 p-3 rounded-xl bg-slate-900/90 border border-slate-800 text-[11px] text-slate-400 flex items-center gap-2.5">
@@ -102,4 +118,3 @@ export const LogoutModal: React.FC = () => {
     </div>
   );
 };
-

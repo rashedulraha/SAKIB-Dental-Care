@@ -16,6 +16,7 @@ interface AdminContextType {
   toggleSidebar: () => void;
   isLogoutModalOpen: boolean;
   isLoggingOut: boolean;
+  logoutError: string;
   openLogoutModal: () => void;
   closeLogoutModal: () => void;
   confirmLogout: () => Promise<void>;
@@ -30,6 +31,7 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState<boolean>(false);
   const [isLoggingOut, setIsLoggingOut] = useState<boolean>(false);
+  const [logoutError, setLogoutError] = useState("");
 
   // Clean up legacy localStorage keys to ensure zero junk storage
   useEffect(() => {
@@ -54,33 +56,35 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const closeLogoutModal = useCallback(() => {
     if (!isLoggingOut) {
       setIsLogoutModalOpen(false);
+      setLogoutError("");
     }
   }, [isLoggingOut]);
 
   const confirmLogout = useCallback(async () => {
+    setLogoutError("");
+    setIsLoggingOut(true);
     try {
-      setIsLoggingOut(true);
-      await fetch("/api/auth/logout", {
+      const response = await fetch("/api/auth/logout", {
         method: "POST",
         cache: "no-store",
       });
-    } catch (err) {
-      console.error("Logout network error:", err);
-    } finally {
-      // Forcefully clear client cookie
-      if (typeof document !== "undefined") {
-        document.cookie = "sdc_admin_session=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Max-Age=0;";
+      if (!response.ok) {
+        throw new Error(`Logout request failed with status ${response.status}.`);
       }
+
       try {
         if (typeof window !== "undefined") {
           localStorage.removeItem("sdc_admin_lang");
           localStorage.removeItem("sdc_site_lang");
         }
       } catch {
-        // ignore
+        console.error("Unable to clear saved admin display preferences.");
       }
-      // Hard redirect to login with logged_out flag so password re-entry is guaranteed
-      window.location.replace("/admin/login?logged_out=1");
+      window.location.replace("/");
+    } catch (error) {
+      console.error("Logout request failed:", error);
+      setLogoutError("Logout failed. Check your connection and try again.");
+      setIsLoggingOut(false);
     }
   }, []);
 
@@ -127,6 +131,7 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         toggleSidebar,
         isLogoutModalOpen,
         isLoggingOut,
+        logoutError,
         openLogoutModal,
         closeLogoutModal,
         confirmLogout,
@@ -144,4 +149,3 @@ export function useAdmin() {
   }
   return context;
 }
-
