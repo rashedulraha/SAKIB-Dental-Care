@@ -1,48 +1,76 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyAdminPassword, signAdminToken, COOKIE_NAME } from "@/lib/auth/session";
+import {
+  getAdminCredentials,
+  verifyAdminCredentials,
+} from "@/lib/auth/credentials";
+import { COOKIE_NAME, signAdminToken } from "@/lib/auth/session";
 
-export async function POST(req: Request) {
+export const runtime = "nodejs";
+
+export async function POST(request: Request) {
+  let body: unknown;
+
   try {
-    const body = await req.json().catch(() => ({}));
-    const password = typeof body.password === "string" ? body.password : "";
+    body = await request.json();
+  } catch {
+    return NextResponse.json(
+      { success: false, message: "Invalid request." },
+      { status: 400 }
+    );
+  }
 
-    if (!password || !verifyAdminPassword(password)) {
-      return NextResponse.json(
-        { success: false, message: "Invalid password! Please enter the correct admin password. (ভুল পাসওয়ার্ড!)" },
-        { status: 401 }
-      );
-    }
+  if (
+    typeof body !== "object" ||
+    body === null ||
+    !("email" in body) ||
+    !("password" in body) ||
+    typeof body.email !== "string" ||
+    typeof body.password !== "string" ||
+    body.email.length > 254 ||
+    body.password.length > 1024
+  ) {
+    return NextResponse.json(
+      { success: false, message: "Enter a valid email address and password." },
+      { status: 400 }
+    );
+  }
 
+  const credentials = getAdminCredentials();
+  if (!credentials) {
+    console.error("ADMIN_EMAIL and ADMIN_PASSWORD must be configured.");
+    return NextResponse.json(
+      { success: false, message: "Admin authentication is not configured." },
+      { status: 503 }
+    );
+  }
+
+  if (!verifyAdminCredentials(body.email, body.password, credentials)) {
+    return NextResponse.json(
+      { success: false, message: "Invalid email or password." },
+      { status: 401 }
+    );
+  }
+
+  try {
     const token = await signAdminToken();
-
-    // Determine if request is secure over HTTPS
-    const isHttps =
-      req.headers.get("x-forwarded-proto") === "https" || req.url.startsWith("https:");
-
-    const cookieOptions = {
-      httpOnly: true,
-      secure: isHttps,
-      sameSite: "lax" as const,
-      maxAge: 60 * 60 * 24 * 7, // 7 days
-      path: "/",
-    };
-
-    const cookieStore = await cookies();
-    cookieStore.set(COOKIE_NAME, token, cookieOptions);
-
     const response = NextResponse.json({
       success: true,
-      message: "Login successful! (লগইন সফল হয়েছে)",
+      message: "Admin sign-in successful.",
     });
 
-    response.cookies.set(COOKIE_NAME, token, cookieOptions);
+    response.cookies.set(COOKIE_NAME, token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+      path: "/",
+    });
 
     return response;
   } catch (error) {
-    console.error("Login error:", error);
+    console.error("Admin sign-in failed:", error);
     return NextResponse.json(
-      { success: false, message: "Server error during login. Please try again." },
+      { success: false, message: "Unable to sign in. Please try again later." },
       { status: 500 }
     );
   }
