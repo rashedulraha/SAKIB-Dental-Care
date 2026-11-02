@@ -55,3 +55,12 @@ model DentalService {
   updatedAt   DateTime @updatedAt
 }
 
+model AdminOtpChallenge {
+  email      String   @id
+  codeHash   String
+  expiresAt  DateTime
+  attempts   Int      @default(0)
+  lastSentAt DateTime
+
+  @@index([expiresAt])
+}
