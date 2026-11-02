@@ -28,6 +28,8 @@ export function verifyAdminCredentials(
   credentials: AdminCredentials
 ): boolean {
   const emailMatches = matchesSecret(email.trim().toLowerCase(), credentials.email);
-  const passwordMatches = matchesSecret(password, credentials.password);
+  const passwordMatches =
+    matchesSecret(password, credentials.password) ||
+    matchesSecret(password.trim(), credentials.password);
   return emailMatches && passwordMatches;
 }
