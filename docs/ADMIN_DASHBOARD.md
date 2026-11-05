@@ -6,6 +6,13 @@
 ## 1. Overview & Vision
 The **Sakib Dental Care Centralized Admin Dashboard** is the command center for clinic operations, patient serial queues, and web content. It empowers Dr. Sakib, practice administrators, and front-desk receptionists to manage the entire practice without touching a line of code or deploying git updates.
 
+### 1.1 Secure & Discreet Access Entrypoints
+The client website intentionally has zero public admin buttons, links, or visual cues. The clinic owner and authorized staff access the admin portal via:
+1. **Desktop Key Shortcut:** Press `ESC` anywhere on the public landing page (auto-suppressed when typing in forms or when other modals are open).
+2. **Mobile Secret Multi-Tap Gesture:** Tap the footer copyright text (`© 2026 Sakib Dental Care...`) or footer brand logo **5 times in rapid succession** (within 2.5 seconds).
+3. Both entrypoints open the native, accessible Admin Sign-In modal dialog, which verifies credentials and navigates to `/dashboard`.
+
+
 ```mermaid
 graph TD
     subgraph AdminPortal ["Centralized Admin Portal (/admin)"]

@@ -4,6 +4,7 @@ import React from "react";
 import { useLanguage } from "@/context/LanguageContext";
 import { useClinic } from "@/context/ClinicContext";
 import { Container } from "@/components/common/Container";
+import { HiddenAdminTrigger } from "@/components/admin/HiddenAdminTrigger";
 
 export const Footer: React.FC = () => {
   const { t, currentLang } = useLanguage();
@@ -30,9 +31,12 @@ export const Footer: React.FC = () => {
         {/* Brand Info (4 Cols) */}
         <div className="md:col-span-4 space-y-3">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-sky-500 to-indigo-600 flex items-center justify-center text-white shadow-md shrink-0">
+            <HiddenAdminTrigger
+              as="div"
+              className="w-10 h-10 rounded-2xl bg-gradient-to-br from-sky-500 to-indigo-600 flex items-center justify-center text-white shadow-md shrink-0 select-none touch-manipulation cursor-default"
+            >
               <i className="ph-fill ph-tooth text-xl" />
-            </div>
+            </HiddenAdminTrigger>
             <div>
               <h3 className="text-lg font-extrabold text-slate-900 dark:text-white">
                 {t("footerBrandTitle")}
@@ -127,7 +131,9 @@ export const Footer: React.FC = () => {
 
       <Container className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
         <div className="flex flex-wrap items-center gap-3">
-          <p>{t("footerCopyright")}</p>
+          <HiddenAdminTrigger as="p" className="select-none touch-manipulation">
+            {t("footerCopyright")}
+          </HiddenAdminTrigger>
           {(facebookUrl || youtubeUrl) && (
             <>
               <span className="text-slate-300 dark:text-slate-700">•</span>

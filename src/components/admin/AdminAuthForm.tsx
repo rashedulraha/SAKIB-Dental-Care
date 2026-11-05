@@ -8,13 +8,15 @@ interface ApiResponse {
   message: string;
 }
 
-interface AdminAuthFormProps {
+export interface AdminAuthFormProps {
   onCancel?: () => void;
+  cancelLabel?: string;
 }
 
-export function AdminAuthForm({ onCancel }: AdminAuthFormProps) {
+export function AdminAuthForm({ onCancel, cancelLabel = "Cancel" }: AdminAuthFormProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -46,15 +48,27 @@ export function AdminAuthForm({ onCancel }: AdminAuthFormProps) {
   };
 
   return (
-    <section className="w-full max-w-md rounded-3xl border border-slate-800 bg-[#0f172a] p-6 shadow-2xl sm:p-8">
+    <section className="relative w-full max-w-md rounded-3xl border border-slate-800 bg-[#0f172a] p-5 sm:p-8 shadow-2xl">
+      {onCancel && (
+        <button
+          type="button"
+          onClick={onCancel}
+          disabled={isSubmitting}
+          aria-label="Close admin sign in modal"
+          className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full border border-slate-800 bg-slate-800/40 text-slate-400 transition hover:bg-slate-800 hover:text-white disabled:opacity-50"
+        >
+          <i className="ph ph-x text-base" aria-hidden="true" />
+        </button>
+      )}
+
       <header className="mb-6 space-y-2 text-center">
         <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-500 to-indigo-600 text-2xl text-white shadow-lg shadow-sky-500/25">
           <i className="ph-fill ph-shield-check" aria-hidden="true" />
         </div>
-        <h2 className="text-xl font-extrabold tracking-tight text-white">
+        <h2 id="admin-auth-title" className="text-xl font-extrabold tracking-tight text-white">
           Admin Sign In
         </h2>
-        <p className="text-xs font-medium text-slate-400">
+        <p id="admin-auth-desc" className="text-xs font-medium text-slate-400">
           Enter your admin email and password to access the dashboard.
         </p>
       </header>
@@ -91,18 +105,32 @@ export function AdminAuthForm({ onCancel }: AdminAuthFormProps) {
           <label htmlFor="admin-password" className="text-xs font-bold text-slate-200">
             Password
           </label>
-          <input
-            id="admin-password"
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            placeholder="••••••••••••"
-            autoComplete="current-password"
-            maxLength={1024}
-            required
-            disabled={isSubmitting}
-            className="w-full rounded-xl border border-slate-700 bg-[#030712] px-4 py-3 text-sm text-white outline-none transition focus:border-sky-500 focus:ring-1 focus:ring-sky-500 disabled:opacity-60"
-          />
+          <div className="relative">
+            <input
+              id="admin-password"
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              placeholder="••••••••••••"
+              autoComplete="current-password"
+              maxLength={1024}
+              required
+              disabled={isSubmitting}
+              className="w-full rounded-xl border border-slate-700 bg-[#030712] px-4 py-3 pr-11 text-sm text-white outline-none transition focus:border-sky-500 focus:ring-1 focus:ring-sky-500 disabled:opacity-60"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              disabled={isSubmitting}
+              aria-label={showPassword ? "Hide password" : "Show password"}
+              className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-400 transition hover:text-slate-200 disabled:opacity-50"
+            >
+              <i
+                className={`ph ${showPassword ? "ph-eye-slash" : "ph-eye"} text-lg`}
+                aria-hidden="true"
+              />
+            </button>
+          </div>
         </div>
         <button
           type="submit"
@@ -128,7 +156,7 @@ export function AdminAuthForm({ onCancel }: AdminAuthFormProps) {
             disabled={isSubmitting}
             className="text-xs font-semibold text-slate-400 transition hover:text-white disabled:opacity-50"
           >
-            Back
+            {cancelLabel}
           </button>
         ) : (
           <Link
